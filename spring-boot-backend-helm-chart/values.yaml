@@ -8,7 +8,7 @@ image:
   repository: "yadnesh082024/github-actions-backend"
   pullPolicy: IfNotPresent
   # Overrides the image tag whose default is the chart appVersion.
-  tag: 
+  tag: main-20240925005602
 
 service:
   type: LoadBalancer
