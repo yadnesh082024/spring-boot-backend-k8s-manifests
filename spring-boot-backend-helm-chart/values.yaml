@@ -1,0 +1,18 @@
+# Default values for spring-app.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+replicaCount: 1
+
+image:
+  repository: "yadnesh082024/github-actions-backend"
+  pullPolicy: IfNotPresent
+  # Overrides the image tag whose default is the chart appVersion.
+  tag: "main-latest"
+
+service:
+  type: LoadBalancer
+  port: 80
+
+containers:
+  port: 8080
