@@ -8,7 +8,7 @@ spec:
   source:
     repoURL: 'https://github.com/yadnesh082024/spring-boot-backend-k8s-manifests.git'
     targetRevision: main
-    path: spring-boot-backend-helm-chart
+    path: ./spring-boot-backend-helm-chart
     helm:
       valueFiles:
         - values.yaml
