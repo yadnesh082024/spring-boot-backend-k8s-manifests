@@ -14,7 +14,8 @@ image:
 service:
   type: NodePort
   port: 80
-  nodePort: 8088  # Specify your desired node port here
+  # Specify your desired node port here. The range of valid ports is 30000-32767
+  nodePort: 30003
 
 containers:
   port: 8080
