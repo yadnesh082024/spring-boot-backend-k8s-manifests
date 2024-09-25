@@ -4,11 +4,14 @@
 
 replicaCount: 1
 
+namespace: spring-app
+
 image:
   repository: "yadnesh082024/github-actions-backend"
   pullPolicy: IfNotPresent
-  # Overrides the image tag whose default is the chart appVersion.
-  tag: main-20240925005602
+  tag: main-latest
+
+imagePullSecrets: my-registry-secret
 
 service:
   type: LoadBalancer

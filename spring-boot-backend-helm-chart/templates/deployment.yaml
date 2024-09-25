@@ -2,6 +2,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: {{ include "spring-app.fullname" . }}
+  namespace: {{ .Values.namespace }}
   labels:
     {{- include "spring-app.labels" . | nindent 4 }}
 spec:
@@ -13,10 +14,12 @@ spec:
     metadata:
       labels:
         {{- include "spring-app.labels" . | nindent 8 }}
-        {{- with .Values.podLabels }}
-        {{- toYaml . | nindent 8 }}
-        {{- end }}
+          {{- with .Values.podLabels }}
+          {{- toYaml . | nindent 8 }}
+          {{- end }}
     spec:
+      imagePullSecrets:
+        - name: {{ .Values.imagePullSecrets }}
       containers:
         - name: {{ .Chart.Name }}
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
