@@ -1,0 +1,92 @@
+# IntelliJ IDEA specific files
+.idea/
+*.iml
+*.iws
+out/
+target/
+*.class
+
+# Logs
+logs/
+*.log
+
+# Maven
+.mvn/
+target/
+pom.xml.tag
+pom.xml.releaseBackup
+pom.xml.versionsBackup
+pom.xml.next
+release.properties
+
+# Gradle
+.gradle/
+build/
+
+# Node.js
+node_modules/
+npm-debug.log
+yarn-error.log
+
+# Environment variables
+.env
+
+# Helm chart files
+charts/
+*.tgz
+release.yaml
+
+# Kubernetes config files
+kubeconfig
+*.kubeconfig
+
+# Docker
+*.dockerignore
+Dockerfile
+docker-compose.yml
+
+# OS generated files
+.DS_Store
+Thumbs.db
+
+# Other
+*.swp
+*.swo
+
+HELP.md
+.gradle
+build/
+!gradle/wrapper/gradle-wrapper.jar
+!**/src/main/**/build/
+!**/src/test/**/build/
+
+### STS ###
+.apt_generated
+.classpath
+.factorypath
+.project
+.settings
+.springBeans
+.sts4-cache
+bin/
+!**/src/main/**/bin/
+!**/src/test/**/bin/
+
+### IntelliJ IDEA ###
+.idea
+*.iws
+*.iml
+*.ipr
+out/
+!**/src/main/**/out/
+!**/src/test/**/out/
+
+### NetBeans ###
+/nbproject/private/
+/nbbuild/
+/dist/
+/nbdist/
+/.nb-gradle/
+
+### VS Code ###
+.vscode/
