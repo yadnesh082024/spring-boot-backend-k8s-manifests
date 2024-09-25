@@ -11,8 +11,6 @@ image:
   pullPolicy: IfNotPresent
   tag: main-latest
 
-imagePullSecrets: my-registry-secret
-
 service:
   type: LoadBalancer
   port: 80
