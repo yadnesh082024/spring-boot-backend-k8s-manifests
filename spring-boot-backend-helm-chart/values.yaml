@@ -19,7 +19,7 @@ ingress:
   enabled: true
   host: spring-app.dev-test-dns-iopkgu6i.hcp.eastasia.azmk8s.io
   annotations:
-    kubernetes.io/ingress.class: addon-http-application-routing
+    kubernetes.io/ingress.class: nginx
   paths:
     - path: /
       pathType: Prefix

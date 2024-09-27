@@ -4,9 +4,7 @@ metadata:
   name: {{ include "spring-app.fullname" . }}-ingress
   namespace: {{ .Values.namespace }}
   annotations:
-    {{- range $key, $value := .Values.ingress.annotations }}
-      {{ $key }}: {{ $value | quote }}
-      {{- end }}
+    kubernetes.io/ingress.class: nginx
 spec:
   rules:
     - host: {{ .Values.ingress.host }}
