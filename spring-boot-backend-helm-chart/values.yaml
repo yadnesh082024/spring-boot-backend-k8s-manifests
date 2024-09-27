@@ -9,7 +9,7 @@ namespace: spring-app
 image:
   repository: "yadnesh082024/github-actions-backend"
   pullPolicy: IfNotPresent
-  tag: main-20240927153251
+  tag: feature-event-filters-20240927151417
 
 service:
   type: NodePort
