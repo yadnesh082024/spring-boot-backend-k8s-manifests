@@ -19,3 +19,10 @@ service:
 
 containers:
   port: 8080
+
+ingress:
+  enabled: true
+  host: spring-app.local
+  annotations: {}
+  tls: false
+  tlsSecret: ""
