@@ -12,10 +12,12 @@ spec:
     - host: {{ .Values.ingress.host }}
       http:
         paths:
-          - path: {{ .Values.ingress.paths[0].path }}
-            pathType: {{ .Values.ingress.paths[0].pathType }}
+          {{- range .Values.ingress.paths }}
+          - path: {{ .path }}
+            pathType: {{ .pathType }}
             backend:
               service:
-                name: {{ .Values.ingress.paths[0].backend.service.name }}
+                name: {{ .backend.service.name }}
                 port:
-                  number: {{ .Values.ingress.paths[0].backend.service.port.number }}
+                  number: {{ .backend.service.port.number }}
+          {{- end }}
