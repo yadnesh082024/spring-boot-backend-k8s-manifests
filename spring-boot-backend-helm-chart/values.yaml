@@ -9,12 +9,11 @@ namespace: spring-app
 image:
   repository: "yadnesh082024/github-actions-backend"
   pullPolicy: IfNotPresent
-  tag: main-20240927153251
+  tag: main-20240925111805
 
 service:
   type: NodePort
   port: 80
-  # Specify your desired node port here. The range of valid ports is 30000-32767
   nodePort: 30003
 
 containers:
@@ -22,8 +21,14 @@ containers:
 
 ingress:
   enabled: true
-  host: spring-app.local
+  host: spring-app.dev-test-dns-iopkgu6i.hcp.eastasia.azmk8s.io
   annotations:
-    kubernetes.io/ingress.class: nginx
-  tls: false
-  tlsSecret: ""
+    kubernetes.io/ingress.class: addon-http-application-routing
+  paths:
+    - path: /
+      pathType: Prefix
+      backend:
+        service:
+          name: spring-app
+          port:
+            number: 80

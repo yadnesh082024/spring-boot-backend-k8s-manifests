@@ -2,7 +2,6 @@
 {{- printf "%s-%s" .Release.Name .Chart.Name | trunc 63 | trimSuffix "-" -}}
 {{- end -}}
 
-# _helpers.tpl
 {{- define "spring-app.labels" -}}
 app.kubernetes.io/name: {{ include "spring-app.name" . }}
 helm.sh/chart: {{ include "spring-app.chart" . }}
@@ -18,10 +17,7 @@ app.kubernetes.io/managed-by: {{ .Release.Service }}
 {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
 {{- end -}}
 
-# _helpers.tpl
 {{- define "spring-app.selectorLabels" -}}
 app.kubernetes.io/name: {{ include "spring-app.name" . }}
 app.kubernetes.io/instance: {{ .Release.Name }}
 {{- end -}}
-
-
