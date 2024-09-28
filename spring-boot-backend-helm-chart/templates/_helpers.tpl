@@ -1,5 +1,5 @@
 {{- define "spring-app.fullname" -}}
-{{- printf "%s-%s" .Release.Name .Chart.Name | trunc 63 | trimSuffix "-" -}}
+{{- printf "%s-%s" (default .Values.releaseName .Release.Name) .Chart.Name | trunc 63 | trimSuffix "-" -}}
 {{- end -}}
 
 {{- define "spring-app.labels" -}}
