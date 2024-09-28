@@ -10,12 +10,10 @@ spec:
     - host: {{ .Values.ingress.host }}
       http:
         paths:
-          {{- range .Values.ingress.paths }}
-          - path: {{ .path }}
-            pathType: {{ .pathType }}
+          - path: /
+            pathType: Prefix
             backend:
               service:
-                name: {{ .backend.service.name }}
+                name: springboot-app-spring-app
                 port:
-                  number: {{ .backend.service.port.number }}
-          {{- end }}
+                  number: 80
