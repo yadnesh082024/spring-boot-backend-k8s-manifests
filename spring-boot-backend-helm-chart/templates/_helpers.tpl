@@ -2,10 +2,6 @@
 {{- printf "%s-%s" .Release.Name .Chart.Name | trunc 63 | trimSuffix "-" -}}
 {{- end -}}
 
-{{- define "spring-app.fullname" -}}
-{{- printf "%s-%s" .Release.Name .Chart.Name | trunc 63 | trimSuffix "-" -}}
-{{- end -}}
-
 {{- define "spring-app.labels" -}}
 app.kubernetes.io/name: {{ include "spring-app.name" . }}
 helm.sh/chart: {{ include "spring-app.chart" . }}
