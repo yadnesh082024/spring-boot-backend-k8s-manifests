@@ -21,10 +21,10 @@ podLabels: {}  # Add this if needed to customize pod labels
 
 ingress:
   enabled: true
-  annotations:
-    kubernetes.io/ingress.class: nginx
   paths:
     - path: /
       pathType: Prefix
+
+
 
 
