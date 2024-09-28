@@ -17,7 +17,6 @@ containers:
 
 ingress:
   enabled: true
-  host: spring-app.25c0ba1c405d4f52be1a.eastasia.aksapp.io
   annotations:
     kubernetes.io/ingress.class: nginx
   paths:
