@@ -17,6 +17,8 @@ service:
 containers:
   port: 8080
 
+podLabels: {}  # Add this if needed to customize pod labels
+
 ingress:
   enabled: true
   annotations:
