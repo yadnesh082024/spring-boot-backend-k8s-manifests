@@ -16,5 +16,5 @@ spec:
               service:
                 name: {{ include "spring-app.fullname" . }}
                 port:
-                  number: {{ $.Values.containers.port }}
+                  number: {{ $.Values.service.port }}  # Change this to .Values.service.port if needed
           {{- end }}
