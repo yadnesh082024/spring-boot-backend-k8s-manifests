@@ -14,7 +14,7 @@ spec:
             pathType: {{ .pathType }}
             backend:
               service:
-                name: {{ .backend.service.name }}
+                name: {{ include "spring-app.fullname" . }}
                 port:
                   number: {{ .backend.service.port.number }}
           {{- end }}

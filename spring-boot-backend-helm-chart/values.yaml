@@ -24,6 +24,6 @@ ingress:
       pathType: Prefix
       backend:
         service:
-          name: spring-app
+          name: springboot-app-spring-app
           port:
             number: 80
