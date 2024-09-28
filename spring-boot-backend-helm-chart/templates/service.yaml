@@ -6,12 +6,9 @@ metadata:
   labels:
     {{- include "spring-app.labels" . | nindent 4 }}
 spec:
-  type: {{ .Values.service.type }}
-  ports:
-    - port: {{ .Values.service.port }}
-      targetPort: {{ .Values.containers.port }}
-      nodePort: {{ .Values.service.nodePort }}
-      protocol: TCP
-      name: http
   selector:
     {{- include "spring-app.selectorLabels" . | nindent 4 }}
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: {{ .Values.containers.port }}
