@@ -8,6 +8,10 @@ on:
 jobs:
   deploy:
     runs-on: ubuntu-latest
+    env:
+      # Set the KUBECONFIG environment variable to use the Kubernetes configuration file stored in GitHub Secrets.
+      KUBECONFIG: ${{ secrets.KUBECONFIG }}
+
     steps:
       # Step to check out the repository code.
       # This step uses the actions/checkout action to clone the repository.
@@ -35,6 +39,13 @@ jobs:
           curl -LO https://github.com/argoproj/argo-rollouts/releases/latest/download/kubectl-argo-rollouts-linux-amd64
           chmod +x ./kubectl-argo-rollouts-linux-amd64
           sudo mv ./kubectl-argo-rollouts-linux-amd64 /usr/local/bin/kubectl-argo-rollouts
+          # Verify the installation of Argo Rollouts CLI
+          kubectl argo rollouts version
+
+      # Step to set the Kubernetes namespace.
+      # This step sets the current context to the specified namespace.
+      - name: Set Kubernetes Namespace
+        run: kubectl config set-context --current --namespace=spring-app
 
       # Step to run smoke tests.
       # This step executes the smoke-tests.sh script to verify the application is functioning correctly.
@@ -45,5 +56,9 @@ jobs:
       # This step uses the Argo Rollouts CLI to undo the rollout if the smoke tests fail.
       - name: Rollback on Failure
         if: failure()
-        run: |
-          kubectl argo rollouts undo rollout spring-app --namespace spring-app
+        run: kubectl argo rollouts undo rollout spring-app --namespace=spring-app
+
+      # Step to print the rollout status.
+      # This step checks and prints the status of the rollout to verify if the rollback was successful.
+      - name: Print Rollout Status
+        run: kubectl argo rollouts get rollout spring-app --namespace=spring-app
