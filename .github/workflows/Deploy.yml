@@ -36,12 +36,6 @@ jobs:
           chmod +x ./kubectl-argo-rollouts-linux-amd64
           sudo mv ./kubectl-argo-rollouts-linux-amd64 /usr/local/bin/kubectl-argo-rollouts
 
-      # Step to deploy the application to Kubernetes using Helm.
-      # This step uses Helm to upgrade or install the application in the specified namespace.
-      - name: Deploy to Kubernetes
-        run: |
-          helm upgrade --install spring-app ./helm/spring-app --namespace spring-app
-
       # Step to run smoke tests.
       # This step executes the smoke-tests.sh script to verify the application is functioning correctly.
       - name: Run Smoke Tests
