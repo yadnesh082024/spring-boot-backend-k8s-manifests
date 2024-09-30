@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Base URL of the application
-BASE_URL="http://20.2.55.194/"
+BASE_URL="http://20.2.55.194"
 
 # Function to test an endpoint
 # Arguments:
