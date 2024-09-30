@@ -96,8 +96,7 @@ jobs:
         if: failure()
         run: |
           echo "Rolling back the rollout..."
-          PREVIOUS_REVISION=$(kubectl argo rollouts get rollout backend-spring-app --namespace=spring-app | grep -oP '(?<=Revision: )\d+' | tail -n 2 | head -n 1)
-          kubectl argo rollouts undo rollout backend-spring-app --to-revision=$PREVIOUS_REVISION --namespace=spring-app
+          kubectl argo rollouts undo backend-spring-app --namespace=spring-app
           echo "Rollback completed."
 
       # Step to print the rollout status.
