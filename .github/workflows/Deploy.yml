@@ -78,16 +78,27 @@ jobs:
       - name: Set execute permissions
         run: chmod +x ./scripts/smoke-tests.sh
 
+      # Step to add a delay of 3 minutes before starting the tests.
+      - name: Wait for 2 minutes
+        run: sleep 120
+
       # Step to run smoke tests.
       # This step executes the smoke-tests.sh script to verify the application is functioning correctly.
       - name: Run Smoke Tests
         run: ./scripts/smoke-tests.sh
 
+      - name: List Rollouts
+        run: kubectl argo rollouts list rollouts --namespace=spring-app
+
       # Step to rollback the deployment on failure.
       # This step uses the Argo Rollouts CLI to undo the rollout if the smoke tests fail.
       - name: Rollback on Failure
         if: failure()
-        run: kubectl argo rollouts undo backend-spring-app --namespace=spring-app
+        run: |
+          echo "Rolling back the rollout..."
+          PREVIOUS_REVISION=$(kubectl argo rollouts get rollout backend-spring-app --namespace=spring-app | grep -oP '(?<=Revision: )\d+' | tail -n 2 | head -n 1)
+          kubectl argo rollouts undo rollout backend-spring-app --to-revision=$PREVIOUS_REVISION --namespace=spring-app
+          echo "Rollback completed."
 
       # Step to print the rollout status.
       # This step checks and prints the status of the rollout to verify if the rollback was successful.
