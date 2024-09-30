@@ -87,7 +87,7 @@ jobs:
       # This step uses the Argo Rollouts CLI to undo the rollout if the smoke tests fail.
       - name: Rollback on Failure
         if: failure()
-        run: kubectl argo rollouts undo rollout backend-spring-app --namespace=spring-app
+        run: kubectl argo rollouts undo backend-spring-app --namespace=spring-app
 
       # Step to print the rollout status.
       # This step checks and prints the status of the rollout to verify if the rollback was successful.
