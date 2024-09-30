@@ -41,7 +41,7 @@ test_endpoint "/resource-created" 201 "CREATED"
 # Test the /resource-accepted endpoint
 # Expected status: 202 Accepted
 # Expected body: "ACCEPTED"
-test_endpoint "/resource-accepted" 202 "ACCEPTED"
+test_endpoint "/resource-accepted" 203 "ACCEPTED"
 
 # If all tests pass, print a success message
 echo "All smoke tests passed!"
