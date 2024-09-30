@@ -11,7 +11,7 @@ spec:
     path: {{ .Values.path }}
     helm:
       valueFiles:
-        - {{ .Values.helm.valueFiles }}
+        - "{{ .Values.helm.valueFiles }}"
   destination:
     server: {{ .Values.destination.server }}
     namespace: {{ .Values.destination.namespace }}
