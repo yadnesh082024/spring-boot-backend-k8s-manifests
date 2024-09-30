@@ -5,8 +5,6 @@ on:
     branches:
       - main
 
-  workflow_dispatch:
-
 jobs:
   deploy:
     permissions:
@@ -16,27 +14,18 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      # Step to check out the repository code.
-      # This step uses the actions/checkout action to clone the repository.
       - uses: actions/checkout@v4
 
-      # Step to log in with your Azure credentials.
-      # This step uses the azure/login action to authenticate with Azure.
-      - name: Azure Login action
-        uses: azure/login@v2
+      - name: Azure login
+        uses: azure/login@v1.4.6
         with:
           creds: ${{ secrets.AZURE_CREDENTIALS }}
-          enable-AzPSSession: true
 
-      # Step to set up kubelogin for non-interactive login.
-      # This step uses the azure/use-kubelogin action to configure kubelogin.
       - name: Set up kubelogin for non-interactive login
         uses: azure/use-kubelogin@v1
         with:
           kubelogin-version: 'v0.0.25'
 
-      # Step to retrieve your Azure Kubernetes Service cluster's kubeconfig file.
-      # This step uses the azure/aks-set-context action to set the Kubernetes context.
       - name: Get K8s context
         uses: azure/aks-set-context@v3
         with:
@@ -45,47 +34,36 @@ jobs:
           admin: 'false'
           use-kubelogin: 'true'
 
-      # Step to set up kubectl, the Kubernetes command-line tool.
-      # This step uses the azure/setup-kubectl action to install kubectl.
       - name: Set up Kubernetes
         uses: azure/setup-kubectl@v4.0.0
         with:
           version: 'latest'
 
-      # Step to set up Helm, the package manager for Kubernetes.
-      # This step uses the azure/setup-helm action to install Helm.
       - name: Set up Helm
         uses: azure/setup-helm@v4.2.0
         with:
           version: 'latest'
 
-      # Step to install the Argo Rollouts CLI.
-      # This step downloads the latest version of the Argo Rollouts CLI, makes it executable, and moves it to /usr/local/bin.
       - name: Set up argo-rollouts
         run: |
           curl -LO https://github.com/argoproj/argo-rollouts/releases/latest/download/kubectl-argo-rollouts-linux-amd64
           chmod +x ./kubectl-argo-rollouts-linux-amd64
           sudo mv ./kubectl-argo-rollouts-linux-amd64 /usr/local/bin/kubectl-argo-rollouts
-          # Verify the installation of Argo Rollouts CLI
           kubectl argo rollouts version
 
-      # Step to set the Kubernetes namespace.
-      # This step sets the current context to the specified namespace.
       - name: Set Kubernetes Namespace
         run: kubectl config set-context --current --namespace=spring-app
 
-      # Step to run smoke tests.
-      # This step executes the smoke-tests.sh script to verify the application is functioning correctly.
+      # Step to set execute permissions on the smoke-tests.sh script.
+      - name: Set execute permissions
+        run: chmod +x ./scripts/smoke-tests.sh
+
       - name: Run Smoke Tests
         run: ./scripts/smoke-tests.sh
 
-      # Step to rollback the deployment on failure.
-      # This step uses the Argo Rollouts CLI to undo the rollout if the smoke tests fail.
       - name: Rollback on Failure
         if: failure()
         run: kubectl argo rollouts undo rollout spring-app --namespace=spring-app
 
-      # Step to print the rollout status.
-      # This step checks and prints the status of the rollout to verify if the rollback was successful.
       - name: Print Rollout Status
         run: kubectl argo rollouts get rollout spring-app --namespace=spring-app
