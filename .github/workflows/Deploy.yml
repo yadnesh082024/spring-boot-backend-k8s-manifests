@@ -18,6 +18,13 @@ jobs:
       - name: Checkout Code
         uses: actions/checkout@v4
 
+      # Step to decode the KUBECONFIG secret and write it to a file.
+      # This step decodes the base64-encoded KUBECONFIG secret and writes it to the ~/.kube/config file.
+      - name: Set up Kubeconfig
+        run: |
+          mkdir -p ~/.kube
+          echo "${{ secrets.KUBECONFIG }}" | base64 --decode > ~/.kube/config
+
       # Step to set up kubectl, the Kubernetes command-line tool.
       # This step uses the azure/setup-kubectl action to install kubectl.
       - name: Set up Kubernetes
