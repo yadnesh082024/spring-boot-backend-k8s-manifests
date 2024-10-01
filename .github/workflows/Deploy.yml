@@ -87,8 +87,15 @@ jobs:
       - name: Run Smoke Tests
         run: ./scripts/smoke-tests.sh
 
-      - name: List Rollouts
-        run: kubectl argo rollouts list rollouts --namespace=spring-app
+      - name: Check argo rollout revisions
+        run: |
+          echo "Rolling back the rollout..."
+          revisions=$(kubectl argo rollouts get rollout backend-spring-app --namespace=spring-app | grep -oP '(?<=# revision:)\d+')
+          CURRENT_REVISION=$(echo "$revisions" | head -n 1)
+          PREVIOUS_REVISION=$(echo "$revisions" | tail -n 2 | head -n 1)
+
+          echo "Current Revision: $CURRENT_REVISION"
+          echo "Previous Revision: $PREVIOUS_REVISION"
 
       # Step to rollback the deployment on failure.
       # This step uses the Argo Rollouts CLI to undo the rollout if the smoke tests fail.

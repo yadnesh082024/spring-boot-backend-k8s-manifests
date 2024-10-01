@@ -1,0 +1,39 @@
+apiVersion: argoproj.io/v1alpha1
+kind: AnalysisTemplate
+metadata:
+  name: endpoint-tests
+spec:
+  metrics:
+    - name: root-endpoint
+      successCondition: result.status == 200 && result.body == "WELCOME"
+      provider:
+        web:
+          url: http://20.2.55.194/
+          method: GET
+          timeoutSeconds: 5
+          jsonPath: '{.status, .body}'
+          headers:
+            - name: Accept
+              value: application/json
+    - name: resource-created-endpoint
+      successCondition: result.status == 201 && result.body == "CREATED"
+      provider:
+        web:
+          url: http://20.2.55.194/resource-created
+          method: GET
+          timeoutSeconds: 5
+          jsonPath: '{.status, .body}'
+          headers:
+            - name: Accept
+              value: application/json
+    - name: resource-accepted-endpoint
+      successCondition: result.status == 202 && result.body == "ACCEPTED"
+      provider:
+        web:
+          url: http://20.2.55.194/resource-accepted
+          method: GET
+          timeoutSeconds: 5
+          jsonPath: '{.status, .body}'
+          headers:
+            - name: Accept
+              value: application/json

@@ -29,7 +29,19 @@ spec:
   strategy:
     canary:
       steps:
-        - setWeight: 20
-        - pause: {}
+        - setWeight: 25
+        - pause: { duration: 60s }
+        - analysis:
+            templates:
+              - templateName: endpoint-tests
         - setWeight: 50
-        - pause: {}
+        - pause: { duration: 60s }
+        - analysis:
+            templates:
+              - templateName: endpoint-tests
+        - setWeight: 75
+        - pause: { duration: 60s }
+        - analysis:
+            templates:
+              - templateName: endpoint-tests
+        - setWeight: 100
