@@ -79,6 +79,9 @@ jobs:
           echo "20.2.55.194 backend-spring-app.com" | sudo tee -a /etc/hosts
           cat /etc/hosts
 
+      - name: Wait for changes to apply
+        run: sleep 10
+
       - name: Verify /etc/hosts update
         run: |
           nslookup backend-spring-app.com
