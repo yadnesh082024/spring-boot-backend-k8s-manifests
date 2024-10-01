@@ -76,7 +76,7 @@ jobs:
 
       - name: Deploy to ArgoCD backend application
         run: |
-          helm upgrade --install backend ./argocd-app-helm-chart --namespace aregocd --values=./argocd-app-helm-chart/values.yaml
+          helm upgrade --install backend ./argocd-app-helm-chart --namespace argocd --values=./argocd-app-helm-chart/values.yaml
 
       - name: Deploy to Spring Boot
         run: |
