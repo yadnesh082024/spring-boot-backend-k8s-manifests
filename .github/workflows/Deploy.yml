@@ -82,6 +82,22 @@ jobs:
         run: |
           helm upgrade --install backend ./argocd-app-helm-chart --namespace argocd --values=./argocd-app-helm-chart/values.yaml
 
+      - name: Check for existing Ingress
+        id: check_ingress
+        run: |
+          if kubectl get ingress backend-spring-app-ingress -n spring-app; then
+            echo "Ingress exists"
+            echo "exists=true" >> $GITHUB_ENV
+          else
+            echo "Ingress does not exist"
+            echo "exists=false" >> $GITHUB_ENV
+          fi
+
+      - name: Delete existing Ingress if it exists
+        if: env.exists == 'true'
+        run: |
+          kubectl delete ingress backend-spring-app-ingress -n spring-app
+
       - name: Deploy to Spring Boot
         run: |
           helm upgrade --install backend-spring-app ./spring-boot-backend-helm-chart --namespace spring-app --values=./spring-boot-backend-helm-chart/values.yaml
