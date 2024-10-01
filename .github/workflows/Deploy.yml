@@ -31,14 +31,14 @@ jobs:
       # Step to set up kubelogin for non-interactive login.
       # This step uses the azure/use-kubelogin action to configure kubelogin.
       - name: Set up kubelogin for non-interactive login
-        uses: azure/use-kubelogin@v1
+        uses: azure/use-kubelogin@v1.2
         with:
-          kubelogin-version: 'v0.0.25'
+          kubelogin-version: 'v0.1.4'
 
       # Step to retrieve your Azure Kubernetes Service cluster's kubeconfig file.
       # This step uses the azure/aks-set-context action to set the Kubernetes context.
       - name: Get K8s context
-        uses: azure/aks-set-context@v3
+        uses: azure/aks-set-context@v4.0.1
         with:
           resource-group: ${{ secrets.RESOURCE_GROUP }}
           cluster-name: ${{ secrets.CLUSTER_NAME }}
