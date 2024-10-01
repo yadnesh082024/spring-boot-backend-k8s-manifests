@@ -14,7 +14,7 @@ spec:
       successCondition: result.status == 200 && result.body == "WELCOME"
       provider:
         web:
-          url: http://backend-spring-app.com/spring-app/
+          url: http://backend-spring-app.com/spring-app
           method: GET
           timeoutSeconds: 5
           jsonPath: '{.status, .body}'
