@@ -8,7 +8,7 @@ spec:
       successCondition: result.status == 200 && result.body == "WELCOME"
       provider:
         web:
-          url: http://20.2.55.194/
+          url: http://backend-spring-app.com/spring-app
           method: GET
           timeoutSeconds: 5
           jsonPath: '{.status, .body}'
@@ -19,7 +19,7 @@ spec:
       successCondition: result.status == 201 && result.body == "CREATED"
       provider:
         web:
-          url: http://20.2.55.194/resource-created
+          url: http://backend-spring-app.com/spring-app/resource-created
           method: GET
           timeoutSeconds: 5
           jsonPath: '{.status, .body}'
@@ -30,7 +30,7 @@ spec:
       successCondition: result.status == 202 && result.body == "ACCEPTED"
       provider:
         web:
-          url: http://20.2.55.194/resource-accepted
+          url: http://backend-spring-app.com/spring-app/resource-accepted
           method: GET
           timeoutSeconds: 5
           jsonPath: '{.status, .body}'

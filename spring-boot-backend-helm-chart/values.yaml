@@ -21,10 +21,8 @@ podLabels: {}  # Add this if needed to customize pod labels
 
 ingress:
   enabled: true
-  paths:
-    - path: /
-      pathType: Prefix
-
-
-
-
+  hosts:
+    - host: backend-spring-app.com
+      paths:
+        - path: /spring-app
+          pathType: Prefix

@@ -74,6 +74,10 @@ jobs:
       - name: Set Kubernetes Namespace
         run: kubectl config set-context --current --namespace=spring-app
 
+      - name: Update /etc/hosts
+        run: |
+          echo "20.2.55.194 backend-spring-app.com" | sudo tee -a /etc/hosts
+
       - name: Deploy to ArgoCD backend application
         run: |
           helm upgrade --install backend ./argocd-app-helm-chart --namespace argocd --values=./argocd-app-helm-chart/values.yaml

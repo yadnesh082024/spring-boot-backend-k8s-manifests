@@ -4,11 +4,12 @@ metadata:
   name: {{ include "spring-app.fullname" . }}-ingress
   namespace: {{ .Values.namespace }}
 spec:
-  ingressClassName: nginx  # Use this instead of the annotation
+  ingressClassName: nginx
   rules:
-    - http:
+    - host: backend-spring-app.com
+      http:
         paths:
-          - path: /
+          - path: /spring-app
             pathType: Prefix
             backend:
               service:
