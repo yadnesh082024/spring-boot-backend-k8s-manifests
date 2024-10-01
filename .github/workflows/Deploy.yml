@@ -90,6 +90,21 @@ jobs:
         run: |
           helm upgrade --install backend-spring-app ./spring-boot-backend-helm-chart --namespace spring-app --values=./spring-boot-backend-helm-chart/values.yaml
 
+      - name: Wait for Analysis
+        run: sleep 120
+
+      - name: Check rollout status
+        id: rollout-status
+        run: |
+          STATUS=$(kubectl get rollout backend-spring-app-spring-app -o jsonpath='{.status.conditions[?(@.type=="Progressing")].reason}')
+          echo "status=$STATUS" >> $GITHUB_ENV
+
+      - name: Rollback if degraded
+        if: env.status == 'ProgressDeadlineExceeded'
+        run: |
+          kubectl rollout undo deployment backend-spring-app-spring-app
+          sleep 30
+
       # Step to print the rollout status.
       # This step checks and prints the status of the rollout to verify if the rollback was successful.
       - name: Print Rollout Status
