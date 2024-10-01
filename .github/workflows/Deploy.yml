@@ -91,7 +91,11 @@ jobs:
           helm upgrade --install backend-spring-app ./spring-boot-backend-helm-chart --namespace spring-app --values=./spring-boot-backend-helm-chart/values.yaml
 
       - name: Wait for Analysis
-        run: sleep 120
+        run: |
+          sleep 120
+          curl http://backend-spring-app.com/spring-app/
+          curl http://backend-spring-app.com/spring-app/resource-created
+          curl http://backend-spring-app.com/spring-app/resource-accepted
 
       - name: Check rollout status
         id: rollout-status
