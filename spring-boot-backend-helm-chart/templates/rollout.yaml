@@ -5,6 +5,8 @@ metadata:
   namespace: {{ .Values.namespace }}
   labels:
     {{- include "spring-app.labels" . | nindent 4 }}
+  annotations:
+    redeploy-timestamp: "{{ .Release.Time | toString }}"
 spec:
   replicas: {{ .Values.replicaCount }}
   selector:
