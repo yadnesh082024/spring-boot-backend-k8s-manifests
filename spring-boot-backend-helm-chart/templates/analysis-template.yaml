@@ -14,6 +14,7 @@ spec:
       successCondition: result.status == 200 && result.body == "WELCOME"
       provider:
         web:
+          insecureSkipVerify: true
           url: http://backend-spring-app.com/spring-app/
           method: GET
           timeoutSeconds: 5
@@ -25,6 +26,7 @@ spec:
       successCondition: result.status == 201 && result.body == "CREATED"
       provider:
         web:
+          insecureSkipVerify: true
           url: http://backend-spring-app.com/spring-app/resource-created
           method: GET
           timeoutSeconds: 5
@@ -36,6 +38,7 @@ spec:
       successCondition: result.status == 202 && result.body == "ACCEPTED"
       provider:
         web:
+          insecureSkipVerify: true
           url: http://backend-spring-app.com/spring-app/resource-accepted
           method: GET
           timeoutSeconds: 5
