@@ -15,48 +15,23 @@ spec:
       provider:
         web:
           url: http://backend-spring-app.com/spring-app/
-          method: GET
-          timeoutSeconds: 5
-          headers:
-            - key: Accept
-              value: application/json
     - name: resource-created-endpoint
       successCondition: result == "CREATED"
       provider:
         web:
           url: http://backend-spring-app.com/spring-app/resource-created
-          method: GET
-          timeoutSeconds: 5
-          headers:
-            - key: Accept
-              value: application/json
     - name: resource-accepted-endpoint
       successCondition: result == "ACCEPTED"
       provider:
         web:
           url: http://backend-spring-app.com/spring-app/resource-accepted
-          method: GET
-          timeoutSeconds: 5
-          headers:
-            - key: Accept
-              value: application/json
     - name: resource-not-acceptable-endpoint
       successCondition: result == "NOT_ACCEPTABLE"
       provider:
         web:
           url: http://backend-spring-app.com/spring-app/resource-not-acceptable
-          method: GET
-          timeoutSeconds: 5
-          headers:
-            - key: Accept
-              value: application/json
     - name: resource-not-implemented-endpoint
       successCondition: result == "NOT_IMPLEMENTED"
       provider:
         web:
           url: http://backend-spring-app.com/spring-app/resource-not-implemented
-          method: GET
-          timeoutSeconds: 5
-          headers:
-            - key: Accept
-              value: application/json
