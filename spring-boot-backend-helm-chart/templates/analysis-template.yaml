@@ -11,38 +11,32 @@ metadata:
 spec:
   metrics:
     - name: root-endpoint
-      successCondition: result.status == 200 && result.body == "WELCOME"
+      successCondition: result == "WELCOME"
       provider:
         web:
-          insecureSkipVerify: true
           url: http://backend-spring-app.com/spring-app/
           method: GET
           timeoutSeconds: 5
-          jsonPath: '{.status, .body}'
           headers:
             - key: Accept
               value: application/json
     - name: resource-created-endpoint
-      successCondition: result.status == 201 && result.body == "CREATED"
+      successCondition: result == "CREATED"
       provider:
         web:
-          insecureSkipVerify: true
           url: http://backend-spring-app.com/spring-app/resource-created
           method: GET
           timeoutSeconds: 5
-          jsonPath: '{.status, .body}'
           headers:
             - key: Accept
               value: application/json
     - name: resource-accepted-endpoint
-      successCondition: result.status == 202 && result.body == "ACCEPTED"
+      successCondition: result == "ACCEPTED"
       provider:
         web:
-          insecureSkipVerify: true
           url: http://backend-spring-app.com/spring-app/resource-accepted
           method: GET
           timeoutSeconds: 5
-          jsonPath: '{.status, .body}'
           headers:
             - key: Accept
               value: application/json
