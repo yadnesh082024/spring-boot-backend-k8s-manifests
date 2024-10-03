@@ -23,7 +23,7 @@ jobs:
       # Step to log in with your Azure credentials.
       # This step uses the azure/login action to authenticate with Azure.
       - name: Azure Login action
-        uses: azure/login@v2
+        uses: azure/login@v2.2.0
         with:
           creds: ${{ secrets.AZURE_CREDENTIALS }}
           enable-AzPSSession: true
