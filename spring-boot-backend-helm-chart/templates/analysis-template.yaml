@@ -11,32 +11,57 @@ metadata:
 spec:
   metrics:
     - name: root-endpoint
-      successCondition: result == "WELCOME"
+      successCondition: result.status == "200" && result.message == "WELCOME"
       provider:
         web:
           url: http://backend-spring-app.com/spring-app/
           method: GET
           timeoutSeconds: 5
+          jsonPath: '{.status, .message}'
           headers:
             - key: Accept
               value: application/json
     - name: resource-created-endpoint
-      successCondition: result == "CREATED"
+      successCondition: result.status == "201" && result.message == "CREATED"
       provider:
         web:
           url: http://backend-spring-app.com/spring-app/resource-created
           method: GET
           timeoutSeconds: 5
+          jsonPath: '{.status, .message}'
           headers:
             - key: Accept
               value: application/json
     - name: resource-accepted-endpoint
-      successCondition: result == "ACCEPTED"
+      successCondition: result.status == "202" && result.message == "ACCEPTED"
       provider:
         web:
           url: http://backend-spring-app.com/spring-app/resource-accepted
           method: GET
           timeoutSeconds: 5
+          jsonPath: '{.status, .message}'
+          headers:
+            - key: Accept
+              value: application/json
+    - name: resource-not-acceptable-endpoint
+      successCondition: result.status == "406" && result.message == "NOT_ACCEPTABLE"
+      provider:
+        web:
+          url: http://backend-spring-app.com/spring-app/resource-not-acceptable
+          method: GET
+          timeoutSeconds: 5
+          jsonPath: '{.status, .message}'
+          headers:
+            - key: Accept
+              value: application/json
+    - name: resource-not-implemented-endpoint
+      successCondition: result.status == "501" && result.message == "NOT_IMPLEMENTED"
+      provider:
+        web:
+          url: http://backend-spring-app.com/spring-app/resource-not-implemented
+          method: GET
+          timeoutSeconds: 5
+          jsonPath: '{.status, .message}'
           headers:
             - key: Accept
               value: application/json
