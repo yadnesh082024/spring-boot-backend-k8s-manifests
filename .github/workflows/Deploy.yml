@@ -88,7 +88,7 @@ jobs:
 
       - name: Deploy to Spring Boot
         run: |
-          helm upgrade --install backend-spring-app ./spring-boot-backend-helm-chart --namespace spring-app --values=./spring-boot-backend-helm-chart/values.yaml
+          helm upgrade --install backend-spring-app ./spring-boot-backend-helm-chart --namespace spring-app --values=./spring-boot-backend-helm-chart/values.yaml  --force
 
       - name: Wait for Analysis
         run: |
