@@ -106,7 +106,7 @@ jobs:
       - name: Rollback if degraded
         if: env.status == 'ProgressDeadlineExceeded'
         run: |
-          kubectl rollout undo deployment backend-spring-app-spring-app
+          kubectl argo rollouts undo backend-spring-app-spring-app --namespace=spring-app
           sleep 30
 
       # Step to print the rollout status.
