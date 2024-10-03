@@ -1,49 +1,62 @@
 apiVersion: argoproj.io/v1alpha1
-kind: Rollout
+kind: AnalysisTemplate
 metadata:
-  name: {{ include "spring-app.fullname" . }}
-  namespace: {{ .Values.namespace }}
+  name: endpoint-tests
+  namespace: spring-app
   labels:
-    {{- include "spring-app.labels" . | nindent 4 }}
+    app.kubernetes.io/managed-by: Helm
   annotations:
-    redeploy-timestamp: "{{ .Release.Time | toString }}"
+    meta.helm.sh/release-name: backend-spring-app
+    meta.helm.sh/release-namespace: spring-app
 spec:
-  replicas: {{ .Values.replicaCount }}
-  selector:
-    matchLabels:
-      {{- include "spring-app.selectorLabels" . | nindent 6 }}
-  template:
-    metadata:
-      labels:
-        {{- include "spring-app.labels" . | nindent 8 }}
-          {{- with .Values.podLabels }}
-          {{- toYaml . | nindent 8 }}
-          {{- end }}
-    spec:
-      containers:
-        - name: {{ .Chart.Name }}
-          image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
-          imagePullPolicy: {{ .Values.image.pullPolicy }}
-          ports:
-            - name: http
-              containerPort: {{ .Values.containers.port }}
-              protocol: TCP
-  strategy:
-    canary:
-      steps:
-        - setWeight: 25
-        - pause: { duration: 60s }
-        - analysis:
-            templates:
-              - templateName: endpoint-tests
-        - setWeight: 50
-        - pause: { duration: 60s }
-        - analysis:
-            templates:
-              - templateName: endpoint-tests
-        - setWeight: 75
-        - pause: { duration: 60s }
-        - analysis:
-            templates:
-              - templateName: endpoint-tests
-        - setWeight: 100
+  metrics:
+    - name: root-endpoint
+      successCondition: result == "WELCOME"
+      provider:
+        web:
+          url: http://backend-spring-app.com/spring-app/
+          method: GET
+          timeoutSeconds: 5
+          headers:
+            - key: Accept
+              value: application/json
+    - name: resource-created-endpoint
+      successCondition: result == "CREATED"
+      provider:
+        web:
+          url: http://backend-spring-app.com/spring-app/resource-created
+          method: GET
+          timeoutSeconds: 5
+          headers:
+            - key: Accept
+              value: application/json
+    - name: resource-accepted-endpoint
+      successCondition: result == "ACCEPTED"
+      provider:
+        web:
+          url: http://backend-spring-app.com/spring-app/resource-accepted
+          method: GET
+          timeoutSeconds: 5
+          headers:
+            - key: Accept
+              value: application/json
+    - name: resource-not-acceptable-endpoint
+      successCondition: result == "NOT_ACCEPTABLE"
+      provider:
+        web:
+          url: http://backend-spring-app.com/spring-app/resource-not-acceptable
+          method: GET
+          timeoutSeconds: 5
+          headers:
+            - key: Accept
+              value: application/json
+    - name: resource-not-implemented-endpoint
+      successCondition: result == "NOT_IMPLEMENTED"
+      provider:
+        web:
+          url: http://backend-spring-app.com/spring-app/resource-not-implemented
+          method: GET
+          timeoutSeconds: 5
+          headers:
+            - key: Accept
+              value: application/json
