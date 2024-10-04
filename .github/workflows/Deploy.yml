@@ -76,7 +76,7 @@ jobs:
 
       - name: Update /etc/hosts
         run: |
-          echo "4.213.205.81 backend-spring-app.com" | sudo tee -a /etc/hosts
+          echo "20.235.206.78  backend-spring-app.com" | sudo tee -a /etc/hosts
           cat /etc/hosts
 
       - name: Wait for changes to apply
@@ -88,6 +88,11 @@ jobs:
 
       - name: Install curl
         run: sudo apt-get update && sudo apt-get install -y curl
+
+      - name: Testing Endpoints
+        run: |
+          response=$(curl -fs http://backend-spring-app.com/spring-app/)
+          echo "Response: $response"
 
       - name: Deploy to Spring Boot
         run: |
