@@ -28,16 +28,22 @@ spec:
             - name: http
               containerPort: {{ .Values.containers.port }}
               protocol: TCP
-          resources:
-            limits:
-              cpu: {{ .Values.resources.limits.cpu }}
-              memory: {{ .Values.resources.limits.memory }}
-            requests:
-              cpu: {{ .Values.resources.requests.cpu }}
-              memory: {{ .Values.resources.requests.memory }}
   strategy:
     canary:
       steps:
+        - setWeight: 25
+        - pause: { duration: 60s }
+        - analysis:
+            templates:
+              - templateName: istio-ingress-analysis
         - setWeight: 50
         - pause: { duration: 60s }
+        - analysis:
+            templates:
+              - templateName: istio-ingress-analysis
+        - setWeight: 75
+        - pause: { duration: 60s }
+        - analysis:
+            templates:
+              - templateName: istio-ingress-analysis
         - setWeight: 100
