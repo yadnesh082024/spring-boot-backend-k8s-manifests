@@ -97,15 +97,6 @@ jobs:
         run: |
           sleep 60
 
-      - name: Test endpoint with curl and capture logs
-        run: |
-          curl -H "Accept: application/json" http://backend-spring-app.com/spring-app/ -o curl_output.txt
-          cat curl_output.txt
-          curl -H "Accept: application/json" http://backend-spring-app.com/spring-app/resource-created -o curl_output_1.txt
-          cat curl_output_1.txt
-          curl -H "Accept: application/json" http://backend-spring-app.com/spring-app/resource-accepted -o curl_output_2.txt
-          cat curl_output_2.txt
-
       - name: Check rollout status
         id: rollout-status
         run: |

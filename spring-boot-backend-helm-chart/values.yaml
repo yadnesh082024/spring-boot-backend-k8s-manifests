@@ -22,7 +22,7 @@ podLabels: {}  # Add this if needed to customize pod labels
 ingress:
   enabled: true
   hosts:
-    - host: backend-spring-app.com
+    - host: yadnesh082024outlook.onmicrosoft.com
       paths:
         - path: /spring-app
           pathType: Prefix

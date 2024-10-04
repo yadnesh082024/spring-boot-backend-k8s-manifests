@@ -6,7 +6,7 @@ metadata:
 spec:
   ingressClassName: nginx
   rules:
-    - host: backend-spring-app.com
+    - host: yadnesh082024outlook.onmicrosoft.com
       http:
         paths:
           - path: /spring-app
