@@ -76,7 +76,7 @@ jobs:
 
       - name: Update /etc/hosts
         run: |
-          echo "20.2.55.194 backend-spring-app.com" | sudo tee -a /etc/hosts
+          echo "4.213.205.81 backend-spring-app.com" | sudo tee -a /etc/hosts
           cat /etc/hosts
 
       - name: Wait for changes to apply
