@@ -89,10 +89,6 @@ jobs:
       - name: Install curl
         run: sudo apt-get update && sudo apt-get install -y curl
 
-      - name: Testing Endpoints
-        run: |
-          response=$(curl -fs http://backend-spring-app.com/spring-app/)
-          echo "Response: $response"
 
       - name: Deploy to Spring Boot
         run: |
@@ -101,6 +97,11 @@ jobs:
       - name: Wait for Analysis
         run: |
           sleep 60
+
+      - name: Testing Endpoints
+        run: |
+          response=$(curl -fs http://backend-spring-app.com/spring-app/)
+          echo "Response: $response"
 
       - name: Check rollout status
         id: rollout-status
