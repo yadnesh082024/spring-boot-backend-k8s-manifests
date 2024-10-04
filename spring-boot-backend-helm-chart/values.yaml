@@ -17,6 +17,14 @@ service:
 containers:
   port: 8080
 
+resources:
+  limits:
+    cpu: 100m
+    memory: 128Mi
+  requests:
+    cpu: 50m
+    memory: 64Mi
+
 podLabels: {}  # Add this if needed to customize pod labels
 
 ingress:
