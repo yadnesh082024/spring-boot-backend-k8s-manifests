@@ -22,14 +22,11 @@ spec:
                 containers:
                   - name: curl-container
                     image: curlimages/curl:latest
-                    securityContext:
-                      runAsUser: 0  # Run as root to modify /etc/hosts
                     command: ["sh", "-c"]
                     args:
                       - |
                         set -e
-
-                        # Update /etc/hosts directly
+                        echo "Updating /etc/hosts..."
                         echo "4.224.90.31 backend-spring-app.com" >> /etc/hosts
                         echo "Updated /etc/hosts with backend-spring-app.com"
 
@@ -40,8 +37,11 @@ spec:
                           expected_status="$1"
                           expected_response="$2"
                           url="$3"
-                          response=$(curl -s -o response_body.txt -w "%{http_code}" "$url")
+                          response=$(curl -s -o response_body.txt -w "%{http_code}" -v "$url")
                           body=$(<response_body.txt)
+
+                          echo "Response code: $response"
+                          echo "Response body: $body"
 
                           if [ "$response" != "$expected_status" ]; then
                             echo "Test failed for $url: Expected status '$expected_status' but got '$response'"
