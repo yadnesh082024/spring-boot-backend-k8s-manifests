@@ -20,28 +20,22 @@ spec:
                   app: endpoint-tester
               spec:
                 containers:
-                  - securityContext:
-                      runAsUser: 0  # Run as root
                   - name: curl-container
                     image: curlimages/curl:latest
+                    securityContext:
+                      runAsUser: 0  # Run as root to modify /etc/hosts
                     command: ["sh", "-c"]
                     args:
                       - |
                         set -e
 
-                        # Directly update /etc/hosts
-                        echo "Updating /etc/hosts..."
+                        # Update /etc/hosts directly
                         echo "4.224.90.31 backend-spring-app.com" >> /etc/hosts
-
-                        echo "Waiting for changes..."
-                        sleep 10  # Adjust wait time as necessary
+                        echo "Updated /etc/hosts with backend-spring-app.com"
 
                         echo "Checking /etc/hosts..."
                         cat /etc/hosts
 
-                        echo "Checking DNS resolution for backend-spring-app.com..."
-                        nslookup backend-spring-app.com
-                        
                         check_endpoint() {
                           expected_status="$1"
                           expected_response="$2"
