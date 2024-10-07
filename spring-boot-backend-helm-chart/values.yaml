@@ -7,7 +7,7 @@ releaseName: backend
 image:
   repository: "yadnesh082024/github-actions-backend"
   pullPolicy: IfNotPresent
-  tag: main-20241003130710
+  tag: main-20241007111443
 
 service:
   type: NodePort
