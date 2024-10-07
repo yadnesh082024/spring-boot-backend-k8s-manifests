@@ -32,5 +32,8 @@ spec:
     canary:
       steps:
         - setWeight: 50
+        - analysis:
+            templates:
+              - endpoint-tests
         - pause: {}
         - setWeight: 100
