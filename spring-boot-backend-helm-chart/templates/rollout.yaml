@@ -34,6 +34,6 @@ spec:
         - setWeight: 50
         - analysis:
             templates:
-              - endpoint-tests
+              - name: endpoint-tests
         - pause: {}
         - setWeight: 100
