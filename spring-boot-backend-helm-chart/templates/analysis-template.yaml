@@ -19,20 +19,26 @@ spec:
                 labels:
                   app: endpoint-tester
               spec:
-                hostAliases:
-                  - ip: "4.224.105.156"  # Your LoadBalancer IP
-                    hostnames:
-                      - "backend-spring-app.com"
                 containers:
                   - name: curl-container
                     image: curlimages/curl:latest
+                    securityContext:
+                      runAsUser: 0  # Run as root
                     command: ["sh", "-c"]
                     args:
                       - |
                         set -e
 
+                        # Update /etc/hosts using sudo
+                        echo "Updating /etc/hosts..."
+                        echo "4.224.105.156 backend-spring-app.com" | sudo tee -a /etc/hosts
+
+                        echo "Waiting for changes..."
+                        sleep 20
+
                         # Check if /etc/hosts is updated correctly
                         echo "Checking DNS resolution for backend-spring-app.com..."
+                        cat /etc/hosts
                         nslookup backend-spring-app.com
                         
                         check_endpoint() {
