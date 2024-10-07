@@ -39,7 +39,7 @@ spec:
                           expected_status="$1"
                           expected_response="$2"
                           url="$3"
-                          response=$(curl -s -o response_body.txt -w "%{http_code}" -v "$url")
+                          response=$(curl -s -o response_body.txt -w "%{http_code}" -X GET "$url")
                           body=$(<response_body.txt)
 
                           echo "Response code: $response"
