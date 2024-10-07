@@ -29,9 +29,9 @@ spec:
                       - |
                         set -e
 
-                        # Update /etc/hosts using sudo
+                        # Update /etc/hosts directly
                         echo "Updating /etc/hosts..."
-                        echo "4.224.105.156 backend-spring-app.com" | sudo tee -a /etc/hosts
+                        echo "4.224.105.156 backend-spring-app.com" >> /etc/hosts
 
                         echo "Waiting for changes..."
                         sleep 20
