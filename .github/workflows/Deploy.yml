@@ -76,7 +76,7 @@ jobs:
 
       - name: Update /etc/hosts
         run: |
-          echo "4.224.105.156  backend-spring-app.com" | sudo tee -a /etc/hosts
+          echo "4.224.90.31  backend-spring-app.com" | sudo tee -a /etc/hosts
           cat /etc/hosts
 
       - name: Wait for changes to apply
@@ -102,18 +102,6 @@ jobs:
         run: |
           response=$(curl -fs http://backend-spring-app.com/spring-app/)
           echo "Response: $response"
-
-      - name: Check rollout status
-        id: rollout-status
-        run: |
-          STATUS=$(kubectl get rollout backend-spring-app-spring-app -o jsonpath='{.status.conditions[?(@.type=="Progressing")].reason}')
-          echo "status=$STATUS" >> $GITHUB_ENV
-
-      - name: Rollback if degraded
-        if: env.status == 'ProgressDeadlineExceeded'
-        run: |
-          kubectl argo rollouts undo backend-spring-app-spring-app --namespace=spring-app
-          sleep 30
 
       # Step to print the rollout status.
       # This step checks and prints the status of the rollout to verify if the rollback was successful.
