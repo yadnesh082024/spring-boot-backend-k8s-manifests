@@ -2,6 +2,12 @@ apiVersion: argoproj.io/v1alpha1
 kind: AnalysisTemplate
 metadata:
   name: istio-ingress-analysis
+  namespace: spring-app
+  labels:
+    app.kubernetes.io/managed-by: Helm
+  annotations:
+    meta.helm.sh/release-name: backend-spring-app
+    meta.helm.sh/release-namespace: spring-app
 spec:
   metrics:
     - name: request-success-rate
