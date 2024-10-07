@@ -5,4 +5,4 @@ metadata:
   namespace: spring-app
 data:
   hosts: |
-    4.224.105.156 backend-spring-app.com
+    4.224.90.31  backend-spring-app.com
