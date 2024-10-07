@@ -1,0 +1,8 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: custom-hosts
+  namespace: spring-app
+data:
+  hosts: |
+    4.224.105.156 backend-spring-app.com

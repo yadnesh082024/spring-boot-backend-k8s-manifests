@@ -19,19 +19,26 @@ spec:
                 labels:
                   app: endpoint-tester
               spec:
+                volumes:
+                  - name: custom-hosts
+                    configMap:
+                      name: custom-hosts
                 containers:
                   - name: curl-container
                     image: curlimages/curl:latest
                     securityContext:
                       runAsUser: 0  # Run as root
+                    volumeMounts:
+                      - name: custom-hosts
+                        mountPath: /custom-hosts
                     command: ["sh", "-c"]
                     args:
                       - |
                         set -e
 
-                        # Update /etc/hosts directly
+                        # Update /etc/hosts using the ConfigMap
                         echo "Updating /etc/hosts..."
-                        echo "4.224.105.156 backend-spring-app.com" >> /etc/hosts
+                        cat /custom-hosts/hosts >> /etc/hosts
 
                         echo "Waiting for changes..."
                         sleep 20
