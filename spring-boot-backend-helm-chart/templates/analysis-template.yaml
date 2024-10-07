@@ -35,11 +35,30 @@ spec:
                         echo "Checking /etc/hosts..."
                         cat /etc/hosts
 
+                        # Test if the hostname resolves correctly
+                        echo "Testing backend-spring-app.com resolution..."
+                        resolved_ip=$(getent hosts backend-spring-app.com | awk '{ print $1 }')
+                        echo "Resolved IP: $resolved_ip"
+
+                        # Directly test the endpoint with headers
+                        echo "Directly testing the endpoint..."
+                        endpoint_response=$(curl -fs -H "Accept: application/json" -o response_body.txt -w "%{http_code}" -X GET "http://backend-spring-app.com/spring-app/")
+                        endpoint_body=$(<response_body.txt)
+
+                        echo "Endpoint Response Code: $endpoint_response"
+                        echo "Endpoint Response Body: $endpoint_body"
+
+                        # Check if the response is empty
+                        if [ -z "$endpoint_body" ]; then
+                          echo "Received an empty response body from http://backend-spring-app.com/spring-app/"
+                        fi
+
+                        # Check the expected responses
                         check_endpoint() {
                           expected_status="$1"
                           expected_response="$2"
                           url="$3"
-                          response=$(curl -s -o response_body.txt -w "%{http_code}" -X GET "$url")
+                          response=$(curl -fs -H "Accept: application/json" -o response_body.txt -w "%{http_code}" -X GET "$url" || echo "Curl failed")
                           body=$(<response_body.txt)
 
                           echo "Response code: $response"
@@ -56,13 +75,12 @@ spec:
                           fi
                         }
 
-                        echo "Testing endpoints..."
-
+                        echo "Testing additional endpoints..."
                         check_endpoint "200" '{"status":"200","message":"WELCOME"}' "http://backend-spring-app.com/spring-app/"
                         check_endpoint "201" '{"status":"201","message":"CREATED"}' "http://backend-spring-app.com/spring-app/resource-created"
                         check_endpoint "202" '{"status":"202","message":"ACCEPTED"}' "http://backend-spring-app.com/spring-app/resource-accepted"
                         check_endpoint "406" '{"status":"406","message":"NOT_ACCEPTABLE"}' "http://backend-spring-app.com/spring-app/resource-not-acceptable"
                         check_endpoint "501" '{"status":"501","message":"NOT_IMPLEMENTED"}' "http://backend-spring-app.com/spring-app/resource-not-implemented"
                         
-                        echo "All tests passed successfully."
+                        echo "All tests completed."
                 restartPolicy: Never
