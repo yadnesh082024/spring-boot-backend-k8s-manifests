@@ -13,52 +13,53 @@ spec:
     - name: endpoint-test
       provider:
         job:
-          template:
-            metadata:
-              labels:
-                app: endpoint-tester
-            spec:
-              hostAliases:
-                - ip: "4.224.90.31"
-                  hostnames:
-                    - "backend-spring-app.com"
-                  containers:
-                    - name: curl-container
-                      image: curlimages/curl:latest
-                      command: ["sh", "-c"]
-                      args:
-                        - |
-                          set -e
-  
-                          # Check if /etc/hosts is updated correctly
-                          echo "Checking DNS resolution for backend-spring-app.com..."
-                          nslookup backend-spring-app.com
-                          
-                          check_endpoint() {
-                            expected_status="$1"
-                            expected_response="$2"
-                            url="$3"
-                            response=$(curl -s -o response_body.txt -w "%{http_code}" "$url")
-                            body=$(<response_body.txt)
-  
-                            if [ "$response" != "$expected_status" ]; then
-                              echo "Test failed for $url: Expected status '$expected_status' but got '$response'"
-                              exit 1  # Fail the job
-                            elif [ "$body" != "$expected_response" ]; then
-                              echo "Test failed for $url: Expected response '$expected_response' but got '$body'"
-                              exit 1  # Fail the job
-                            else
-                              echo "Test passed for $url: Received status '$response' and body '$body'"
-                            fi
-                          }
-  
-                          echo "Testing endpoints..."
-  
-                          check_endpoint "200" '{"status":"200","message":"WELCOME"}' "http://backend-spring-app.com/spring-app/"
-                          check_endpoint "201" '{"status":"201","message":"CREATED"}' "http://backend-spring-app.com/spring-app/resource-created"
-                          check_endpoint "202" '{"status":"202","message":"ACCEPTED"}' "http://backend-spring-app.com/spring-app/resource-accepted"
-                          check_endpoint "406" '{"status":"406","message":"NOT_ACCEPTABLE"}' "http://backend-spring-app.com/spring-app/resource-not-acceptable"
-                          check_endpoint "501" '{"status":"501","message":"NOT_IMPLEMENTED"}' "http://backend-spring-app.com/spring-app/resource-not-implemented"
-                          
-                          echo "All tests passed successfully."
-                  restartPolicy: Never
+          spec:
+            template:
+              metadata:
+                labels:
+                  app: endpoint-tester
+              spec:
+                hostAliases:
+                  - ip: "4.224.105.156"  # Your LoadBalancer IP
+                    hostnames:
+                      - "backend-spring-app.com"
+                containers:
+                  - name: curl-container
+                    image: curlimages/curl:latest
+                    command: ["sh", "-c"]
+                    args:
+                      - |
+                        set -e
+
+                        # Check if /etc/hosts is updated correctly
+                        echo "Checking DNS resolution for backend-spring-app.com..."
+                        nslookup backend-spring-app.com
+                        
+                        check_endpoint() {
+                          expected_status="$1"
+                          expected_response="$2"
+                          url="$3"
+                          response=$(curl -s -o response_body.txt -w "%{http_code}" "$url")
+                          body=$(<response_body.txt)
+
+                          if [ "$response" != "$expected_status" ]; then
+                            echo "Test failed for $url: Expected status '$expected_status' but got '$response'"
+                            exit 1  # Fail the job
+                          elif [ "$body" != "$expected_response" ]; then
+                            echo "Test failed for $url: Expected response '$expected_response' but got '$body'"
+                            exit 1  # Fail the job
+                          else
+                            echo "Test passed for $url: Received status '$response' and body '$body'"
+                          fi
+                        }
+
+                        echo "Testing endpoints..."
+
+                        check_endpoint "200" '{"status":"200","message":"WELCOME"}' "http://backend-spring-app.com/spring-app/"
+                        check_endpoint "201" '{"status":"201","message":"CREATED"}' "http://backend-spring-app.com/spring-app/resource-created"
+                        check_endpoint "202" '{"status":"202","message":"ACCEPTED"}' "http://backend-spring-app.com/spring-app/resource-accepted"
+                        check_endpoint "406" '{"status":"406","message":"NOT_ACCEPTABLE"}' "http://backend-spring-app.com/spring-app/resource-not-acceptable"
+                        check_endpoint "501" '{"status":"501","message":"NOT_IMPLEMENTED"}' "http://backend-spring-app.com/spring-app/resource-not-implemented"
+                        
+                        echo "All tests passed successfully."
+                restartPolicy: Never
