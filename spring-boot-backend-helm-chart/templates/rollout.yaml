@@ -22,7 +22,7 @@ spec:
     spec:
       initContainers:
         - name: init-image
-          image: busybox  # Using a lightweight image
+          image: busybox  # A lightweight image for the init container
           command: ['sh', '-c', 'echo "IMAGE_NAME={{ .Values.image.repository }}:{{ .Values.image.tag }}" > /mnt/image-name/image-name.txt']
           volumeMounts:
             - name: image-name
@@ -42,9 +42,11 @@ spec:
                   fieldPath: metadata.name
             - name: IMAGE_NAME
               valueFrom:
-                configMapKeyRef:
-                  name: image-name
-                  key: image-name.txt
+                fieldRef:
+                  fieldPath: metadata.annotations['image-name']
+          volumeMounts:
+            - name: image-name
+              mountPath: /mnt/image-name
       volumes:
         - name: image-name
           emptyDir: {}
