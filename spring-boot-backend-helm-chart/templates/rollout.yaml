@@ -20,6 +20,18 @@ spec:
           {{- toYaml . | nindent 8 }}
           {{- end }}
     spec:
+      initContainers:
+        - name: init-container
+          image: busybox
+          command: ['sh', '-c']
+          args:
+            - |
+              # Fetch the image name of the main container
+              IMAGE_NAME=$(kubectl get pod $HOSTNAME -o jsonpath='{.spec.containers.image}')
+              echo "IMAGE_NAME=$IMAGE_NAME" > /etc/podinfo/image.env
+          volumeMounts:
+            - name: podinfo
+              mountPath: /etc/podinfo
       containers:
         - name: {{ .Chart.Name }}
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
@@ -35,8 +47,15 @@ spec:
                   fieldPath: metadata.name
             - name: IMAGE_NAME
               valueFrom:
-                fieldRef:
-                  fieldPath: spec.containers.image
+                configMapKeyRef:
+                  name: podinfo
+                  key: image.env
+          volumeMounts:
+            - name: podinfo
+              mountPath: /etc/podinfo
+      volumes:
+        - name: podinfo
+          emptyDir: {}
   strategy:
     canary:
       steps:

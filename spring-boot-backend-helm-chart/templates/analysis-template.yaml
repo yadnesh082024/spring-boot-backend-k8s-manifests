@@ -11,7 +11,6 @@ metadata:
 spec:
   metrics:
     - name: endpoint-test
-      #failureLimit: 4
       provider:
         job:
           spec:
@@ -39,6 +38,10 @@ spec:
                         echo "Checking /etc/hosts..."
                         cat /etc/hosts
 
+                        # Install jq
+                        echo "Installing jq..."
+                        apk add --no-cache jq
+
                         # Test if the hostname resolves correctly
                         echo "Testing backend-spring-app.com resolution..."
                         resolved_ip=$(getent hosts backend-spring-app.com | awk '{ print $1 }')
@@ -56,29 +59,42 @@ spec:
 
                         # Check the expected responses
                         check_endpoint() {
-                          expected_response="$1"
-                          url="$2"
+                          expected_status="$1"
+                          expected_message="$2"
+                          url="$3"
 
                           # Get the response directly
                           response=$(curl -fs "$url" || echo "Curl failed")
 
                           echo "Response: $response"
 
-                          # Check if the response matches the expected response
-                          if [ "$response" != "$expected_response" ]; then
-                            echo "Test failed for $url: Expected response '$expected_response' but got '$response'"
+                          # Extract status and message from the response
+                          actual_status=$(echo "$response" | jq -r '.status')
+                          actual_message=$(echo "$response" | jq -r '.message')
+                          actual_podName=$(echo "$response" | jq -r '.podName')
+                          actual_imageName=$(echo "$response" | jq -r '.imageName')
+
+                          # Check if the status and message match the expected values
+                          if [ "$actual_status" != "$expected_status" ] || [ "$actual_message" != "$expected_message" ]; then
+                            echo "Test failed for $url: Expected status '$expected_status' and message '$expected_message' but got status '$actual_status' and message '$actual_message'"
                             exit 1  # Fail the job
-                          else
-                            echo "Test passed for $url: Received expected response '$response'"
                           fi
+
+                          # Check if podName and imageName exist
+                          if [ -z "$actual_podName" ] || [ -z "$actual_imageName" ]; then
+                            echo "Test failed for $url: podName or imageName is missing"
+                            exit 1  # Fail the job
+                          fi
+
+                          echo "Test passed for $url: Received expected status '$actual_status' and message '$actual_message'"
                         }
 
                         echo "Testing additional endpoints..."
-                        check_endpoint '{"status":"200","message":"WELCOME"}' "http://backend-spring-app.com/spring-app/"
-                        check_endpoint '{"status":"201","message":"CREATED"}' "http://backend-spring-app.com/spring-app/resource-created"
-                        check_endpoint '{"status":"202","message":"ACCEPTED"}' "http://backend-spring-app.com/spring-app/resource-accepted"
-                        #check_endpoint '{"status":"406","message":"NOT_ACCEPTABLE"}' "http://backend-spring-app.com/spring-app/resource-not-acceptable"
-                        #check_endpoint '{"status":"501","message":"NOT_IMPLEMENTED"}' "http://backend-spring-app.com/spring-app/resource-not-implemented"
-                      
+                        check_endpoint "200" "WELCOME" "http://backend-spring-app.com/spring-app/"
+                        check_endpoint "201" "CREATED" "http://backend-spring-app.com/spring-app/resource-created"
+                        check_endpoint "202" "ACCEPTED" "http://backend-spring-app.com/spring-app/resource-accepted"
+                        #check_endpoint "406" "NOT_ACCEPTABLE" "http://backend-spring-app.com/spring-app/resource-not-acceptable"
+                        #check_endpoint "501" "NOT_IMPLEMENTED" "http://backend-spring-app.com/spring-app/resource-not-implemented"
+                        
                         echo "All tests completed."
                 restartPolicy: Never
