@@ -9,7 +9,7 @@ spec:
     - host: backend-spring-app.com
       http:
         paths:
-          - path: /spring-app/
+          - path: /spring-app
             pathType: Prefix
             backend:
               service:
