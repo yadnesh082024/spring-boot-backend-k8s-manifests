@@ -20,13 +20,6 @@ spec:
           {{- toYaml . | nindent 8 }}
           {{- end }}
     spec:
-      initContainers:
-        - name: init-image
-          image: busybox  # A lightweight image for the init container
-          command: ['sh', '-c', 'echo "IMAGE_NAME={{ .Values.image.repository }}:{{ .Values.image.tag }}" > /mnt/image-name/image-name.txt']
-          volumeMounts:
-            - name: image-name
-              mountPath: /mnt/image-name
       containers:
         - name: {{ .Chart.Name }}
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
@@ -41,15 +34,7 @@ spec:
                 fieldRef:
                   fieldPath: metadata.name
             - name: IMAGE_NAME
-              valueFrom:
-                fieldRef:
-                  fieldPath: metadata.annotations['image-name']
-          volumeMounts:
-            - name: image-name
-              mountPath: /mnt/image-name
-      volumes:
-        - name: image-name
-          emptyDir: {}
+              value: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
   strategy:
     canary:
       steps:
