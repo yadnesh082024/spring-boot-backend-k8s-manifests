@@ -28,6 +28,15 @@ spec:
             - name: http
               containerPort: {{ .Values.containers.port }}
               protocol: TCP
+          env:
+            - name: POD_NAME
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.name
+            - name: IMAGE_NAME
+              valueFrom:
+                fieldRef:
+                  fieldPath: spec.containers.image
   strategy:
     canary:
       steps:
