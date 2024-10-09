@@ -47,13 +47,35 @@ spec:
                         resolved_ip=$(getent hosts backend-spring-app.com | awk '{ print $1 }')
                         echo "Resolved IP: $resolved_ip"
 
+                        # Function to retry curl requests
+                        retry_curl() {
+                          local url=$1
+                          local retries=5
+                          local wait=5
+                          local count=0
+                          local response
+
+                          until [ $count -ge $retries ]
+                          do
+                            response=$(curl -fs "$url" || echo "Curl failed")
+                            if [ "$response" != "Curl failed" ]; then
+                              echo "$response"
+                              return 0
+                            fi
+                            count=$((count+1))
+                            echo "Retry $count/$retries: Waiting $wait seconds before retrying..."
+                            sleep $wait
+                          done
+
+                          echo "Failed to get a successful response after $retries retries for $url"
+                          return 1
+                        }
+
                         # Directly test the endpoint with headers
                         echo "Directly testing the endpoint..."
-                        endpoint_response=$(curl -fs -H "Accept: application/json" "http://backend-spring-app.com/spring-app/health")
-                        endpoint_response_2=$(curl -fs -H "Accept: application/json" "http://backend-spring-app.com/spring-app/test")
+                        endpoint_response=$(retry_curl "http://backend-spring-app.com/spring-app/health")
                         # Print the response in JSON format using jq
                         echo $endpoint_response | jq .
-                        echo $endpoint_response_2 | jq .
 
                         # Check if the response is empty
                         if [ -z "$endpoint_response" ]; then
@@ -67,9 +89,9 @@ spec:
                           url="$3"
 
                           # Get the response directly
-                          response=$(curl -fs "$url" || echo "Curl failed")
+                          response=$(retry_curl "$url" || echo "Curl failed")
 
-                          echo "Response: $response"
+                          echo "Response: $response | jq"
 
                           # Extract status and message from the response
                           actual_status=$(echo "$response" | jq -r '.status')
@@ -96,6 +118,7 @@ spec:
                         check_endpoint "200" "WELCOME" "http://backend-spring-app.com/spring-app/"
                         check_endpoint "201" "CREATED" "http://backend-spring-app.com/spring-app/resource-created"
                         check_endpoint "202" "ACCEPTED" "http://backend-spring-app.com/spring-app/resource-accepted"
+                        check_endpoint "200" "TEST" "http://backend-spring-app.com/spring-app/test"
                         #check_endpoint "406" "NOT_ACCEPTABLE" "http://backend-spring-app.com/spring-app/resource-not-acceptable"
                         #check_endpoint "501" "NOT_IMPLEMENTED" "http://backend-spring-app.com/spring-app/resource-not-implemented"
                         
