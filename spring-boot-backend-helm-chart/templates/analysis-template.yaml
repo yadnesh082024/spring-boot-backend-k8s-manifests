@@ -63,11 +63,11 @@ spec:
                               return 0
                             fi
                             count=$((count+1))
-                            echo "Retry $count/$retries: Waiting $wait seconds before retrying..."
+                            echo "Retry $count/$retries: Waiting $wait seconds before retrying..." >&2
                             sleep $wait
                           done
 
-                          echo "Failed to get a successful response after $retries retries for $url"
+                          echo "Failed to get a successful response after $retries retries for $url" >&2
                           return 1
                         }
 
@@ -91,7 +91,10 @@ spec:
                           # Get the response directly
                           response=$(retry_curl "$url" || echo "Curl failed")
 
-                          echo "Response: $response"
+                          # Print the response only if it's not empty
+                          if [ -n "$response" ]; then
+                            echo "Response: $response"
+                          fi
 
                           # Ensure the response is valid JSON before passing to jq
                           if echo "$response" | jq . > /dev/null 2>&1; then
