@@ -93,7 +93,8 @@ spec:
 
                           # Print the response only if it's not empty
                           if [ -n "$response" ]; then
-                            echo "Response: $response"
+                            echo "Response: "
+                            echo $response | jq .                         
                           fi
 
                           # Ensure the response is valid JSON before passing to jq
