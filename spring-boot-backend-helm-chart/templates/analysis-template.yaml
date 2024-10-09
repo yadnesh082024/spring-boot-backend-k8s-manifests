@@ -49,8 +49,11 @@ spec:
 
                         # Directly test the endpoint with headers
                         echo "Directly testing the endpoint..."
-                        endpoint_response=$(curl -fs -H "Accept: application/json" "http://backend-spring-app.com/spring-app/")
-                        echo "Endpoint Response: $endpoint_response"
+                        endpoint_response=$(curl -fs -H "Accept: application/json" "http://backend-spring-app.com/spring-app/health")
+                        endpoint_response_2=$(curl -fs -H "Accept: application/json" "http://backend-spring-app.com/spring-app/test")
+                        # Print the response in JSON format using jq
+                        echo $endpoint_response | jq .
+                        echo $endpoint_response_2 | jq .
 
                         # Check if the response is empty
                         if [ -z "$endpoint_response" ]; then
