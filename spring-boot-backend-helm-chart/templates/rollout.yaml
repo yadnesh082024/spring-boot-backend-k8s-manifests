@@ -42,5 +42,5 @@ spec:
         - analysis:
             templates:
               - templateName: endpoint-tests
-        - pause: {}
+        - pause: { duration: 120s }
         - setWeight: 100
