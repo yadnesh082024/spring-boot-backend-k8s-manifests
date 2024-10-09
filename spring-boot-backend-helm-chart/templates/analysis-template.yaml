@@ -14,7 +14,7 @@ spec:
       provider:
         job:
           spec:
-            ttlSecondsAfterFinished: 300  # Job will be deleted 5 minutes after finishing
+            ttlSecondsAfterFinished: 600  # Job will be deleted 5 minutes after finishing
             backoffLimit: 3
             activeDeadlineSeconds: 150  # Set the time in seconds before which the job should not end
             template:
@@ -91,27 +91,33 @@ spec:
                           # Get the response directly
                           response=$(retry_curl "$url" || echo "Curl failed")
 
-                          echo "Response: $response | jq"
+                          echo "Response: $response"
 
-                          # Extract status and message from the response
-                          actual_status=$(echo "$response" | jq -r '.status')
-                          actual_message=$(echo "$response" | jq -r '.message')
-                          actual_podName=$(echo "$response" | jq -r '.podName')
-                          actual_imageName=$(echo "$response" | jq -r '.imageName')
+                          # Ensure the response is valid JSON before passing to jq
+                          if echo "$response" | jq . > /dev/null 2>&1; then
+                            # Extract status and message from the response
+                            actual_status=$(echo "$response" | jq -r '.status')
+                            actual_message=$(echo "$response" | jq -r '.message')
+                            actual_podName=$(echo "$response" | jq -r '.podName')
+                            actual_imageName=$(echo "$response" | jq -r '.imageName')
 
-                          # Check if the status and message match the expected values
-                          if [ "$actual_status" != "$expected_status" ] || [ "$actual_message" != "$expected_message" ]; then
-                            echo "Test failed for $url: Expected status '$expected_status' and message '$expected_message' but got status '$actual_status' and message '$actual_message'"
+                            # Check if the status and message match the expected values
+                            if [ "$actual_status" != "$expected_status" ] || [ "$actual_message" != "$expected_message" ]; then
+                              echo "Test failed for $url: Expected status '$expected_status' and message '$expected_message' but got status '$actual_status' and message '$actual_message'"
+                              exit 1  # Fail the job
+                            fi
+
+                            # Check if podName and imageName exist
+                            if [ -z "$actual_podName" ] || [ -z "$actual_imageName" ]; then
+                              echo "Test failed for $url: podName or imageName is missing"
+                              exit 1  # Fail the job
+                            fi
+
+                            echo "Test passed for $url: Received expected status '$actual_status' and message '$actual_message'"
+                          else
+                            echo "Invalid JSON response: $response"
                             exit 1  # Fail the job
                           fi
-
-                          # Check if podName and imageName exist
-                          if [ -z "$actual_podName" ] || [ -z "$actual_imageName" ]; then
-                            echo "Test failed for $url: podName or imageName is missing"
-                            exit 1  # Fail the job
-                          fi
-
-                          echo "Test passed for $url: Received expected status '$actual_status' and message '$actual_message'"
                         }
 
                         echo "Testing additional endpoints..."
