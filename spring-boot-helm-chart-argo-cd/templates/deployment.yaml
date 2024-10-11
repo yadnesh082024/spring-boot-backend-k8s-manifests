@@ -1,0 +1,37 @@
+apiVersion: apps/v1
+kind: Rollout
+metadata:
+  name: {{ include "spring-app.fullname" . }}
+  namespace: {{ .Values.namespace }}
+  labels:
+    {{- include "spring-app.labels" . | nindent 4 }}
+  annotations:
+    redeploy-timestamp: "{{ .Release.Time | toString }}"
+spec:
+  replicas: {{ .Values.replicaCount }}
+  selector:
+    matchLabels:
+      {{- include "spring-app.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      labels:
+        {{- include "spring-app.labels" . | nindent 8 }}
+          {{- with .Values.podLabels }}
+          {{- toYaml . | nindent 8 }}
+          {{- end }}
+    spec:
+      containers:
+        - name: {{ .Chart.Name }}
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          ports:
+            - name: http
+              containerPort: {{ .Values.containers.port }}
+              protocol: TCP
+          env:
+            - name: POD_NAME
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.name
+            - name: IMAGE_NAME
+              value: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"

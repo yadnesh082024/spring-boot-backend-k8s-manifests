@@ -1,0 +1,28 @@
+replicaCount: 2
+
+namespace: spring-app
+
+releaseName: backend
+
+image:
+  repository: "yadnesh082024/github-actions-backend"
+  pullPolicy: IfNotPresent
+  tag: main-20241009120734
+
+service:
+  type: NodePort
+  port: 80
+  nodePort: 30003
+
+containers:
+  port: 8080
+
+podLabels: {}  # Add this if needed to customize pod labels
+
+ingress:
+  enabled: true
+  hosts:
+    - host: backend-spring-app.com
+      paths:
+        - path: /spring-app
+          pathType: Prefix
