@@ -4,9 +4,9 @@ metadata:
   name: {{ include "spring-app.fullname" . }}-ingress
   namespace: {{ .Values.namespace }}
 spec:
-  ingressClassName: nginx
+  ingressClassName: traefik
   rules:
-    - host: argocd.backend-spring-app.com
+    - host: argo-cd.backend-spring-app.com
       http:
         paths:
           - path: /spring-app
