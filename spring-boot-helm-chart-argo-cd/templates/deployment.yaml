@@ -1,5 +1,5 @@
 apiVersion: apps/v1
-kind: Rollout
+kind: Deployment
 metadata:
   name: {{ include "spring-app.fullname" . }}
   namespace: {{ .Values.namespace }}
