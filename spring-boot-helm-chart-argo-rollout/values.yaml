@@ -12,7 +12,7 @@ image:
 service:
   type: NodePort
   port: 80
-  nodePort: 30003
+  nodePort: 30040
 
 containers:
   port: 8080
