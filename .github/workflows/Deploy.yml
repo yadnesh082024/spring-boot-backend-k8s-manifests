@@ -76,7 +76,7 @@ jobs:
 
       - name: Update /etc/hosts
         run: |
-          echo "4.224.90.31  backend-spring-app.com" | sudo tee -a /etc/hosts
+          echo "4.157.155.52  rollouts.backend-spring-app.com" | sudo tee -a /etc/hosts
           cat /etc/hosts
 
       - name: Wait for changes to apply
@@ -84,7 +84,7 @@ jobs:
 
       - name: Verify /etc/hosts update
         run: |
-          nslookup backend-spring-app.com
+          nslookup rollouts.backend-spring-app.com
 
       - name: Install curl
         run: sudo apt-get update && sudo apt-get install -y curl
@@ -92,7 +92,7 @@ jobs:
 
       - name: Deploy to Spring Boot
         run: |
-          helm upgrade --install backend-spring-app ./spring-boot-backend-helm-chart --create-namespace --namespace spring-app --values=./spring-boot-backend-helm-chart/values.yaml  --force
+          helm upgrade --install rollouts-spring-release ./spring-boot-helm-chart-argo-rollout --create-namespace --namespace spring-app --values=./spring-boot-helm-chart-argo-rollout/values.yaml  --force
 
       - name: Wait for Analysis
         run: |
@@ -106,4 +106,4 @@ jobs:
       # Step to print the rollout status.
       # This step checks and prints the status of the rollout to verify if the rollback was successful.
       - name: Print Rollout Status
-        run: kubectl argo rollouts get rollout backend-spring-app-spring-app --namespace=spring-app
+        run: kubectl argo rollouts get rollout rollouts-spring-rollouts-spring-app --namespace=spring-app
