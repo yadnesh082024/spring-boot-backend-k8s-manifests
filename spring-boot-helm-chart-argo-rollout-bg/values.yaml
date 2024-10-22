@@ -9,12 +9,12 @@ image:
   pullPolicy: IfNotPresent
   tag: main-20241022165251
 
-service-active:
+serviceActive:
   type: NodePort
   port: 80
   nodePort: 30050
 
-service-preview:
+servicePreview:
   type: NodePort
   port: 80
   nodePort: 30060

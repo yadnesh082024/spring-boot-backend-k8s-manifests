@@ -11,6 +11,6 @@ spec:
     {{- include "spring-app.selectorLabels" . | nindent 4 }}
   ports:
     - protocol: TCP
-      port: {{ .Values.service-active.port }}  # Updated to use service port
+      port: {{ .Values.serviceActive.port }}  # Updated to use service port
       targetPort: {{ .Values.containers.port }}
-      nodePort: {{ .Values.service-active.nodePort }}
+      nodePort: {{ .Values.serviceActive.nodePort }}
