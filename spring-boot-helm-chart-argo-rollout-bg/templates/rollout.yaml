@@ -44,7 +44,8 @@ spec:
       # This allows the preview stack to be reachable without serving production traffic.
       # This field is optional.
       previewService: {{ include "spring-app.fullname" . }}-preview
-      autoPromotionEnabled: false  # Set to false to require manual promotion
+      #autoPromotionEnabled: false  # Set to false to require manual promotion
+      autoPromotionSeconds: 300
       prePromotionAnalysis:
         templates:
           - templateName: tests
