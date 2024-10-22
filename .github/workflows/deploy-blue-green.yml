@@ -91,7 +91,7 @@ jobs:
 
       - name: Deploy to Spring Boot
         run: |
-          helm upgrade --install rollouts-spring-release ./spring-boot-helm-chart-argo-rollout-bg --create-namespace --namespace bg-rollouts-spring --values=./spring-boot-helm-chart-argo-rollout-bg/values.yaml  --force
+          helm upgrade --install bg-rollouts-spring-release ./spring-boot-helm-chart-argo-rollout-bg --create-namespace --namespace bg-rollouts-spring --values=./spring-boot-helm-chart-argo-rollout-bg/values.yaml  --force
 
       - name: Wait for Analysis
         run: |
