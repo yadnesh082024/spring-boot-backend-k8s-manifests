@@ -2,7 +2,7 @@ apiVersion: argoproj.io/v1alpha1
 kind: AnalysisTemplate
 metadata:
   name: endpoint-tests
-  namespace: rollouts-spring
+  namespace: bg-rollouts-spring
   labels:
     app.kubernetes.io/managed-by: Helm
   annotations:
