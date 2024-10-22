@@ -1,0 +1,111 @@
+apiVersion: argoproj.io/v1alpha1
+kind: AnalysisTemplate
+metadata:
+  name: tests
+  namespace: rollouts-spring
+  labels:
+    app.kubernetes.io/managed-by: Helm
+  annotations:
+    meta.helm.sh/release-name: bg-rollouts
+    meta.helm.sh/release-namespace: bg-rollouts-spring
+spec:
+  metrics:
+    - name: test
+      provider:
+        job:
+          spec:
+            ttlSecondsAfterFinished: 600
+            backoffLimit: 3
+            activeDeadlineSeconds: 150
+            template:
+              metadata:
+                labels:
+                  app: tester
+              spec:
+                securityContext:
+                  runAsUser: 0
+                containers:
+                  - name: curl-container
+                    image: curlimages/curl:latest
+                    command: ["sh", "-c"]
+                    args:
+                      - |
+                        set -e
+                        baseUrl="http://rollouts-spring-release-rollouts-preview.bg-rollouts-spring.svc.cluster.local:80"
+
+                        echo "Installing jq..."
+                        apk add --no-cache jq
+
+                        retry_curl() {
+                          local url=$1
+                          local retries=5
+                          local wait=5
+                          local count=0
+                          local response
+
+                          until [ $count -ge $retries ]; do
+                            response=$(curl -fs "$url" || echo "Curl failed")
+                            if [ "$response" != "Curl failed" ]; then
+                              echo "$response"
+                              return 0
+                            fi
+                            count=$((count+1))
+                            echo "Retry $count/$retries: Waiting $wait seconds before retrying..." >&2
+                            sleep $wait
+                          done
+
+                          echo "Failed to get a successful response after $retries retries for $url" >&2
+                          return 1
+                        }
+
+                        echo "Directly testing the endpoint..."
+                        endpoint_response=$(retry_curl "$baseUrl/spring-app/health")
+                        echo $endpoint_response | jq .
+
+                        if [ -z "$endpoint_response" ]; then
+                          echo "Received an empty response body from $baseUrl/spring-app/"
+                        fi
+
+                        check_endpoint() {
+                          expected_status="$1"
+                          expected_message="$2"
+                          url="$3"
+
+                          response=$(retry_curl "$url" || echo "Curl failed")
+
+                          if [ -n "$response" ]; then
+                            echo "Response: "
+                            echo $response | jq .
+                          fi
+
+                          if echo "$response" | jq . > /dev/null 2>&1; then
+                            actual_status=$(echo "$response" | jq -r '.status')
+                            actual_message=$(echo "$response" | jq -r '.message')
+                            actual_podName=$(echo "$response" | jq -r '.podName')
+                            actual_imageName=$(echo "$response" | jq -r '.imageName')
+
+                            if [ "$actual_status" != "$expected_status" ] || [ "$actual_message" != "$expected_message" ]; then
+                              echo "Test failed for $url: Expected status '$expected_status' and message '$expected_message' but got status '$actual_status' and message '$actual_message'"
+                              exit 1
+                            fi
+
+                            if [ -z "$actual_podName" ] || [ -z "$actual_imageName" ]; then
+                              echo "Test failed for $url: podName or imageName is missing"
+                              exit 1
+                            fi
+
+                            echo "Test passed for $url: Received expected status '$actual_status' and message '$actual_message'"
+                          else
+                            echo "Invalid JSON response: $response"
+                            exit 1
+                          fi
+                        }
+
+                        echo "Testing additional endpoints..."
+                        check_endpoint "200" "WELCOME" "$baseUrl/spring-app/"
+                        check_endpoint "201" "CREATED" "$baseUrl/spring-app/resource-created"
+                        check_endpoint "202" "ACCEPTED" "$baseUrl/spring-app/resource-accepted"
+                        check_endpoint "200" "TEST" "$baseUrl/spring-app/test"
+                        
+                        echo "All tests completed."
+                restartPolicy: Never

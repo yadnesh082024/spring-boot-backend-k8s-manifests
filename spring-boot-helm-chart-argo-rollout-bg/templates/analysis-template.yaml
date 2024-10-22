@@ -1,0 +1,136 @@
+apiVersion: argoproj.io/v1alpha1
+kind: AnalysisTemplate
+metadata:
+  name: endpoint-tests
+  namespace: rollouts-spring
+  labels:
+    app.kubernetes.io/managed-by: Helm
+  annotations:
+    meta.helm.sh/release-name: bg-rollouts
+    meta.helm.sh/release-namespace: bg-rollouts-spring
+spec:
+  metrics:
+    - name: endpoint-test
+      provider:
+        job:
+          spec:
+            ttlSecondsAfterFinished: 600  # Job will be deleted 5 minutes after finishing
+            backoffLimit: 3
+            activeDeadlineSeconds: 150  # Set the time in seconds before which the job should not end
+            template:
+              metadata:
+                labels:
+                  app: endpoint-tester
+              spec:
+                securityContext:
+                  runAsUser: 0  # Run as root
+                containers:
+                  - name: curl-container
+                    image: curlimages/curl:latest
+                    command: ["sh", "-c"]
+                    args:
+                      - |
+                        set -e
+                        echo "Updating /etc/hosts..."
+                        echo "4.224.90.31 backend-spring-app.com" >> /etc/hosts
+                        echo "Updated /etc/hosts with backend-spring-app.com"
+
+                        echo "Checking /etc/hosts..."
+                        cat /etc/hosts
+
+                        # Install jq
+                        echo "Installing jq..."
+                        apk add --no-cache jq
+
+                        # Test if the hostname resolves correctly
+                        echo "Testing backend-spring-app.com resolution..."
+                        resolved_ip=$(getent hosts backend-spring-app.com | awk '{ print $1 }')
+                        echo "Resolved IP: $resolved_ip"
+
+                        # Function to retry curl requests
+                        retry_curl() {
+                          local url=$1
+                          local retries=5
+                          local wait=5
+                          local count=0
+                          local response
+
+                          until [ $count -ge $retries ]
+                          do
+                            response=$(curl -fs "$url" || echo "Curl failed")
+                            if [ "$response" != "Curl failed" ]; then
+                              echo "$response"
+                              return 0
+                            fi
+                            count=$((count+1))
+                            echo "Retry $count/$retries: Waiting $wait seconds before retrying..." >&2
+                            sleep $wait
+                          done
+
+                          echo "Failed to get a successful response after $retries retries for $url" >&2
+                          return 1
+                        }
+
+                        # Directly test the endpoint with headers
+                        echo "Directly testing the endpoint..."
+                        endpoint_response=$(retry_curl "http://backend-spring-app.com/spring-app/health")
+                        # Print the response in JSON format using jq
+                        echo $endpoint_response | jq .
+
+                        # Check if the response is empty
+                        if [ -z "$endpoint_response" ]; then
+                          echo "Received an empty response body from http://backend-spring-app.com/spring-app/"
+                        fi
+
+                        # Check the expected responses
+                        check_endpoint() {
+                          expected_status="$1"
+                          expected_message="$2"
+                          url="$3"
+
+                          # Get the response directly
+                          response=$(retry_curl "$url" || echo "Curl failed")
+
+                          # Print the response only if it's not empty
+                          if [ -n "$response" ]; then
+                            echo "Response: "
+                            echo $response | jq .                         
+                          fi
+
+                          # Ensure the response is valid JSON before passing to jq
+                          if echo "$response" | jq . > /dev/null 2>&1; then
+                            # Extract status and message from the response
+                            actual_status=$(echo "$response" | jq -r '.status')
+                            actual_message=$(echo "$response" | jq -r '.message')
+                            actual_podName=$(echo "$response" | jq -r '.podName')
+                            actual_imageName=$(echo "$response" | jq -r '.imageName')
+
+                            # Check if the status and message match the expected values
+                            if [ "$actual_status" != "$expected_status" ] || [ "$actual_message" != "$expected_message" ]; then
+                              echo "Test failed for $url: Expected status '$expected_status' and message '$expected_message' but got status '$actual_status' and message '$actual_message'"
+                              exit 1  # Fail the job
+                            fi
+
+                            # Check if podName and imageName exist
+                            if [ -z "$actual_podName" ] || [ -z "$actual_imageName" ]; then
+                              echo "Test failed for $url: podName or imageName is missing"
+                              exit 1  # Fail the job
+                            fi
+
+                            echo "Test passed for $url: Received expected status '$actual_status' and message '$actual_message'"
+                          else
+                            echo "Invalid JSON response: $response"
+                            exit 1  # Fail the job
+                          fi
+                        }
+
+                        echo "Testing additional endpoints..."
+                        check_endpoint "200" "WELCOME" "http://backend-spring-app.com/spring-app/"
+                        check_endpoint "201" "CREATED" "http://backend-spring-app.com/spring-app/resource-created"
+                        check_endpoint "202" "ACCEPTED" "http://backend-spring-app.com/spring-app/resource-accepted"
+                        check_endpoint "200" "TEST" "http://backend-spring-app.com/spring-app/test"
+                        #check_endpoint "406" "NOT_ACCEPTABLE" "http://backend-spring-app.com/spring-app/resource-not-acceptable"
+                        #check_endpoint "501" "NOT_IMPLEMENTED" "http://backend-spring-app.com/spring-app/resource-not-implemented"
+                        
+                        echo "All tests completed."
+                restartPolicy: Never

@@ -71,7 +71,7 @@ jobs:
       # Step to set the Kubernetes namespace.
       # This step sets the current context to the specified namespace.
       - name: Set Kubernetes Namespace
-        run: kubectl config set-context --current --namespace=rollouts-spring
+        run: kubectl config set-context --current --namespace=bg-rollouts-spring
 
       - name: Update /etc/hosts
         run: |
@@ -91,7 +91,7 @@ jobs:
 
       - name: Deploy to Spring Boot
         run: |
-          helm upgrade --install rollouts-spring-release ./spring-boot-helm-chart-argo-rollout --create-namespace --namespace rollouts-spring --values=./spring-boot-helm-chart-argo-rollout/values.yaml  --force
+          helm upgrade --install rollouts-spring-release ./spring-boot-helm-chart-argo-rollout-bg --create-namespace --namespace bg-rollouts-spring --values=./spring-boot-helm-chart-argo-rollout-bg/values.yaml  --force
 
       - name: Wait for Analysis
         run: |
@@ -105,4 +105,4 @@ jobs:
       # Step to print the rollout status.
       # This step checks and prints the status of the rollout to verify if the rollback was successful.
       - name: Print Rollout Status
-        run: kubectl argo rollouts get rollout rollouts-spring-rollouts-spring-app --namespace=rollouts-spring
+        run: kubectl argo rollouts get rollout rollouts-spring-release-rollouts --namespace=bg-rollouts-spring
