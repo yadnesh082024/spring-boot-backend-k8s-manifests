@@ -13,6 +13,6 @@ spec:
             pathType: Prefix
             backend:
               service:
-                name: {{ include "spring-app.fullname" . }}-preview
+                name: {{ include "spring-app.fullname" . }}-active
                 port:
                   number: {{ .Values.service.port }}
