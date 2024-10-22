@@ -7,7 +7,7 @@ releaseName: argo-cd
 image:
   repository: "yadnesh082024/github-actions-backend"
   pullPolicy: IfNotPresent
-  tag: main-20241018134740
+  tag: main-20241022165251
 
 service:
   type: NodePort
