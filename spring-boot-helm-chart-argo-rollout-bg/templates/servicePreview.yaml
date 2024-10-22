@@ -6,7 +6,7 @@ metadata:
   labels:
     {{- include "spring-app.labels" . | nindent 4 }}
 spec:
-  type: {{ .Values.service.type }}  # Ensure service type is defined
+  type: {{ .Values.servicePreview.type }}  # Ensure service type is defined
   selector:
     {{- include "spring-app.selectorLabels" . | nindent 4 }}
   ports:
