@@ -75,7 +75,7 @@ jobs:
 
       - name: Update /etc/hosts
         run: |
-          echo "4.157.155.52  rollouts.backend-spring-app.com" | sudo tee -a /etc/hosts
+          echo "4.157.155.52  bg.rollouts.backend-spring-app.com" | sudo tee -a /etc/hosts
           cat /etc/hosts
 
       - name: Wait for changes to apply
@@ -83,7 +83,7 @@ jobs:
 
       - name: Verify /etc/hosts update
         run: |
-          nslookup rollouts.backend-spring-app.com
+          nslookup bg.rollouts.backend-spring-app.com
 
       - name: Install curl
         run: sudo apt-get update && sudo apt-get install -y curl
@@ -99,7 +99,7 @@ jobs:
 
       - name: Testing Endpoints
         run: |
-          response=$(curl -fs http://backend-spring-app.com/spring-app/)
+          response=$(curl -fs http://bg.rollouts.backend-spring-app.com/spring-app/health)
           echo "Response: $response"
 
       # Step to print the rollout status.

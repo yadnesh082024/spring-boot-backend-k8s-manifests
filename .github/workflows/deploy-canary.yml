@@ -99,7 +99,7 @@ jobs:
 
       - name: Testing Endpoints
         run: |
-          response=$(curl -fs http://backend-spring-app.com/spring-app/)
+          response=$(curl -fs http://rollouts.backend-spring-app.com/spring-app/health)
           echo "Response: $response"
 
       # Step to print the rollout status.
