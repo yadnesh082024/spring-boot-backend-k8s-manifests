@@ -49,3 +49,4 @@ spec:
       prePromotionAnalysis:
         templates:
           - templateName: tests
+          - templateName: response-time-analysis
