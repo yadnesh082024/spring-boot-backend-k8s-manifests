@@ -1,4 +1,4 @@
-name: CD Pipeline
+name: Rollouts with Blue Green
 
 on:
   #push:
