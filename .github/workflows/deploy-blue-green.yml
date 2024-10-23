@@ -105,4 +105,4 @@ jobs:
       # Step to print the rollout status.
       # This step checks and prints the status of the rollout to verify if the rollback was successful.
       - name: Print Rollout Status
-        run: kubectl argo rollouts get rollout rollouts-spring-release-rollouts --namespace=bg-rollouts-spring
+        run: kubectl argo rollouts get rollout bg-rollouts-spring-release-bg-rollouts --namespace=bg-rollouts-spring
