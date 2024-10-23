@@ -10,14 +10,14 @@ image:
   tag: main-20241023085003
 
 serviceActive:
-  type: NodePort
+  type: ClusterIP
   port: 80
-  nodePort: 30050
+  #nodePort: 30050
 
 servicePreview:
-  type: NodePort
+  type: ClusterIP
   port: 80
-  nodePort: 30060
+  #nodePort: 30060
 
 containers:
   port: 8080
