@@ -35,8 +35,8 @@ spec:
               value: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
   strategy:
     blueGreen:
+      previewService: {{ include "spring-app.fullname" . }}-preview
       activeService: {{ include "spring-app.fullname" . }}-active
-      previewService: bg-rollouts-spring-release-bg-rollouts-preview
       autoPromotionEnabled: true
       prePromotionAnalysis:
         templates:
