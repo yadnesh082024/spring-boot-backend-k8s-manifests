@@ -1,7 +1,7 @@
 apiVersion: argoproj.io/v1alpha1
 kind: AnalysisTemplate
 metadata:
-  name: tests
+  name: endpoint-tests
   namespace: bg-rollouts-spring
   labels:
     app.kubernetes.io/managed-by: Helm
@@ -10,7 +10,7 @@ metadata:
     meta.helm.sh/release-namespace: bg-rollouts-spring
 spec:
   metrics:
-    - name: test
+    - name: endpoint-test
       provider:
         job:
           spec:

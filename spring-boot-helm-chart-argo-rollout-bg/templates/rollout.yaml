@@ -38,8 +38,7 @@ spec:
       activeService: {{ include "spring-app.fullname" . }}-active
       previewService: {{ include "spring-app.fullname" . }}-preview
       autoPromotionEnabled: true
-      #autoPromotionSeconds: 60
       prePromotionAnalysis:
         templates:
-          - templateName: tests
-          - templateName: response-time-analysis
+          - templateName: endpoint-tests
+          - templateName: response-time-analysis-bg
