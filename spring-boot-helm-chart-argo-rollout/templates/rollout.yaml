@@ -37,6 +37,8 @@ spec:
               value: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
   strategy:
     canary:
+      canaryService: {{ include "spring-app.fullname" . }}-canary
+      stableService: {{ include "spring-app.fullname" . }}
       steps:
         - setWeight: 50
         - analysis:
