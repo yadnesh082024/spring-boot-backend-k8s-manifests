@@ -1,8 +1,8 @@
 replicaCount: 2
 
-namespace: blueGreen-rollouts-spring
+namespace: bluegreen-rollouts-spring
 
-releaseName: blueGreen-rollouts
+releaseName: bluegreen-rollouts
 
 image:
   repository: "yadnesh082024/github-actions-backend"
@@ -23,7 +23,7 @@ podLabels: {}  # Add this if needed to customize pod labels
 ingress:
   enabled: true
   hosts:
-    - host: blueGreen.rollouts.backend-spring-app.com
+    - host: bluegreen.rollouts.backend-spring-app.com
       paths:
         - path: /spring-app
           pathType: Prefix

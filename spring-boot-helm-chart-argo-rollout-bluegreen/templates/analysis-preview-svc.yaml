@@ -2,12 +2,12 @@ apiVersion: argoproj.io/v1alpha1
 kind: AnalysisTemplate
 metadata:
   name: preview-svc-tests
-  namespace: blueGreen-rollouts-spring
+  namespace: bluegreen-rollouts-spring
   labels:
     app.kubernetes.io/managed-by: Helm
   annotations:
-    meta.helm.sh/release-name: blueGreen-rollouts
-    meta.helm.sh/release-namespace: blueGreen-rollouts-spring
+    meta.helm.sh/release-name: bluegreen-rollouts
+    meta.helm.sh/release-namespace: bluegreen-rollouts-spring
 spec:
   metrics:
     - name: preview-svc-endpoint
@@ -31,7 +31,7 @@ spec:
                     args:
                       - |
                         set -e
-                        baseUrl="http://bg-rollouts-spring-release-bg-rollouts-preview.blueGreen-rollouts-spring.svc.cluster.local:80"
+                        baseUrl="http://bg-rollouts-spring-release-bg-rollouts-preview.bluegreen-rollouts-spring.svc.cluster.local:80"
 
                         echo "Installing jq..."
                         apk add --no-cache jq

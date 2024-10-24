@@ -6,7 +6,7 @@ metadata:
 spec:
   ingressClassName: traefik
   rules:
-    - host: blueGreen.rollouts.backend-spring-app.com
+    - host: bluegreen.rollouts.backend-spring-app.com
       http:
         paths:
           - path: /spring-app

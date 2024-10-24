@@ -75,7 +75,7 @@ jobs:
 
       - name: Deploy to Spring Boot
         run: |
-          helm upgrade --install blueGreen-rollouts-release ./spring-boot-helm-chart-argo-rollout-blueGreen --create-namespace --namespace blueGreen-rollouts-spring --values=./spring-boot-helm-chart-argo-rollout-blueGreen/values.yaml --force
+          helm upgrade --install blueGreen-release ./spring-boot-helm-chart-argo-rollout-blueGreen --create-namespace --namespace blueGreen-rollouts-spring --values=./spring-boot-helm-chart-argo-rollout-blueGreen/values.yaml --force
 
       - name: Wait for Analysis
         run: |
