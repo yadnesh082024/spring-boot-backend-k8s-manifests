@@ -5,8 +5,6 @@ metadata:
   namespace: {{ .Values.namespace }}
   labels:
     {{- include "spring-app.labels" . | nindent 4 }}
-  annotations:
-    redeploy-timestamp: "{{ .Release.Time | toString }}"
 spec:
   replicas: {{ .Values.replicaCount }}
   selector:
@@ -37,16 +35,11 @@ spec:
               value: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
   strategy:
     blueGreen:
-      # activeService specifies the service to update with the new template hash at time of promotion.
-      # This field is mandatory for the blueGreen update strategy.
       activeService: {{ include "spring-app.fullname" . }}-active
-      # previewService specifies the service to update with the new template hash before promotion.
-      # This allows the preview stack to be reachable without serving production traffic.
-      # This field is optional.
       previewService: {{ include "spring-app.fullname" . }}-preview
-      autoPromotionEnabled: true  # Set to false to require manual promotion
-      autoPromotionSeconds: 60
+      autoPromotionEnabled: true
+      #autoPromotionSeconds: 60
       prePromotionAnalysis:
-         templates:
-           - templateName: tests
-           - templateName: response-time-analysis
+        templates:
+          - templateName: tests
+          - templateName: response-time-analysis
