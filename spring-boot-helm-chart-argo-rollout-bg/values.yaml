@@ -7,7 +7,7 @@ releaseName: bg-rollouts
 image:
   repository: "yadnesh082024/github-actions-backend"
   pullPolicy: IfNotPresent
-  tag: main-20241022165251
+  tag: main-20241024153943
 
 serviceActive:
   type: ClusterIP
@@ -27,7 +27,7 @@ podLabels: {}  # Add this if needed to customize pod labels
 ingress:
   enabled: true
   hosts:
-    - host: bg.rollouts.backend-spring-app.com
+    - host: rollouts.backend-spring-app.com
       paths:
         - path: /spring-app
           pathType: Prefix
