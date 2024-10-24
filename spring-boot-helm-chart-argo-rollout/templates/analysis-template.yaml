@@ -7,6 +7,7 @@ spec:
     - name: average-response-time
       successCondition: result < 0.5
       failureCondition: result >= 0.5
+      failureLimit: 2
       provider:
         prometheus:
           address: http://prometheus-server.prometheus.svc.cluster.local
