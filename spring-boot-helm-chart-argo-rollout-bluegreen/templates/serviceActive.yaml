@@ -13,4 +13,3 @@ spec:
     - protocol: TCP
       port: {{ .Values.service.port }}  # Updated to use service port
       targetPort: {{ .Values.containers.port }}
-      #nodePort: {{ .Values.serviceActive.nodePort }}

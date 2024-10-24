@@ -71,11 +71,11 @@ jobs:
       # Step to set the Kubernetes namespace.
       # This step sets the current context to the specified namespace.
       - name: Set Kubernetes Namespace
-        run: kubectl config set-context --current --namespace=blueGreen-rollouts-spring
+        run: kubectl config set-context --current --namespace=bluegreen-rollouts-spring
 
       - name: Deploy to Spring Boot
         run: |
-          helm upgrade --install blueGreen-release ./spring-boot-helm-chart-argo-rollout-blueGreen --create-namespace --namespace blueGreen-rollouts-spring --values=./spring-boot-helm-chart-argo-rollout-blueGreen/values.yaml --force
+          helm upgrade --install bluegreen-release ./spring-boot-helm-chart-argo-rollout-bluegreen --create-namespace --namespace blueGreen-rollouts-spring --values=./spring-boot-helm-chart-argo-rollout-bluegreen/values.yaml --force
 
       - name: Wait for Analysis
         run: |
@@ -84,4 +84,4 @@ jobs:
       # Step to print the rollout status.
       # This step checks and prints the status of the rollout to verify if the rollback was successful.
       - name: Print Rollout Status
-        run: kubectl argo rollouts get rollout blueGreen-rollouts-spring-release-bg-rollouts --namespace=blueGreen-rollouts-spring
+        run: kubectl argo rollouts get rollout bluegreen-release-bluegreen-rollouts --namespace=bluegreen-rollouts-spring
