@@ -2,6 +2,12 @@ apiVersion: argoproj.io/v1alpha1
 kind: AnalysisTemplate
 metadata:
   name: response-time-analysis
+  namespace: rollouts-spring
+  labels:
+    app.kubernetes.io/managed-by: Helm
+  annotations:
+    meta.helm.sh/release-name: rollouts
+    meta.helm.sh/release-namespace: rollouts-spring
 spec:
   metrics:
     - name: average-response-time
