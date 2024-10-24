@@ -6,7 +6,7 @@ metadata:
 spec:
   ingressClassName: traefik
   rules:
-    - host: bg.rollouts.backend-spring-app.com
+    - host: blueGreen.rollouts.backend-spring-app.com
       http:
         paths:
           - path: /spring-app
@@ -15,4 +15,4 @@ spec:
               service:
                 name: {{ include "spring-app.fullname" . }}-active
                 port:
-                  number: {{ .Values.serviceActive.port }}
+                  number: {{ .Values.service.port }}

@@ -6,11 +6,11 @@ metadata:
   labels:
     {{- include "spring-app.labels" . | nindent 4 }}
 spec:
-  type: {{ .Values.serviceActive.type }}  # Ensure service type is defined
+  type: {{ .Values.service.type }}  # Ensure service type is defined
   selector:
     {{- include "spring-app.selectorLabels" . | nindent 4 }}
   ports:
     - protocol: TCP
-      port: {{ .Values.serviceActive.port }}  # Updated to use service port
+      port: {{ .Values.service.port }}  # Updated to use service port
       targetPort: {{ .Values.containers.port }}
       #nodePort: {{ .Values.serviceActive.nodePort }}

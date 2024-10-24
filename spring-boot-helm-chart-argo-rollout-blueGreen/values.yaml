@@ -1,23 +1,19 @@
 replicaCount: 2
 
-namespace: bg-rollouts-spring
+namespace: blueGreen-rollouts-spring
 
-releaseName: bg-rollouts
+releaseName: blueGreen-rollouts
 
 image:
   repository: "yadnesh082024/github-actions-backend"
   pullPolicy: IfNotPresent
   tag: main-20241024153943
 
-serviceActive:
+service:
   type: ClusterIP
   port: 80
   #nodePort: 30050
 
-servicePreview:
-  type: ClusterIP
-  port: 80
-  #nodePort: 30060
 
 containers:
   port: 8080
@@ -27,7 +23,7 @@ podLabels: {}  # Add this if needed to customize pod labels
 ingress:
   enabled: true
   hosts:
-    - host: rollouts.backend-spring-app.com
+    - host: blueGreen.rollouts.backend-spring-app.com
       paths:
         - path: /spring-app
           pathType: Prefix

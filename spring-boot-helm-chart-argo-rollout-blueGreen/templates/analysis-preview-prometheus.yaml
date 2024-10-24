@@ -2,12 +2,12 @@ apiVersion: argoproj.io/v1alpha1
 kind: AnalysisTemplate
 metadata:
   name: response-time-analysis-preview
-  namespace: bg-rollouts-spring
+  namespace: blueGreen-rollouts-spring
   labels:
     app.kubernetes.io/managed-by: Helm
   annotations:
-    meta.helm.sh/release-name: bg-rollouts
-    meta.helm.sh/release-namespace: bg-rollouts-spring
+    meta.helm.sh/release-name: blueGreen-rollouts
+    meta.helm.sh/release-namespace: blueGreen-rollouts-spring
 spec:
   metrics:
     - name: average-response-time-bg
