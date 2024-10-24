@@ -45,7 +45,7 @@ spec:
       # This field is optional.
       previewService: {{ include "spring-app.fullname" . }}-preview
       #autoPromotionEnabled: false  # Set to false to require manual promotion
-      autoPromotionSeconds: 120
+      autoPromotionSeconds: 150
       prePromotionAnalysis:
         templates:
           - templateName: tests

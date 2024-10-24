@@ -45,5 +45,5 @@ spec:
             templates:
               - templateName: tests
               - templateName: response-time-analysis
-        - pause: {duration: 300s}
+        - pause: {duration: 120s}
         - setWeight: 100
