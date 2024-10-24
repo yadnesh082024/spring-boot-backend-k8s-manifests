@@ -73,22 +73,6 @@ jobs:
       - name: Set Kubernetes Namespace
         run: kubectl config set-context --current --namespace=bg-rollouts-spring
 
-      - name: Update /etc/hosts
-        run: |
-          echo "4.157.155.52  bg.rollouts.backend-spring-app.com" | sudo tee -a /etc/hosts
-          cat /etc/hosts
-
-      - name: Wait for changes to apply
-        run: sleep 10
-
-      - name: Verify /etc/hosts update
-        run: |
-          nslookup bg.rollouts.backend-spring-app.com
-
-      - name: Install curl
-        run: sudo apt-get update && sudo apt-get install -y curl
-
-
       - name: Deploy to Spring Boot
         run: |
           helm upgrade --install bg-rollouts-spring-release ./spring-boot-helm-chart-argo-rollout-bg --create-namespace --namespace bg-rollouts-spring --values=./spring-boot-helm-chart-argo-rollout-bg/values.yaml  --force
@@ -96,11 +80,6 @@ jobs:
       - name: Wait for Analysis
         run: |
           sleep 60
-
-      - name: Testing Endpoints
-        run: |
-          response=$(curl -fs http://bg.rollouts.backend-spring-app.com/spring-app/health)
-          echo "Response: $response"
 
       # Step to print the rollout status.
       # This step checks and prints the status of the rollout to verify if the rollback was successful.
