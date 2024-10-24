@@ -10,7 +10,7 @@ metadata:
     meta.helm.sh/release-namespace: blueGreen-rollouts-spring
 spec:
   metrics:
-    - name: average-response-time-bg
+    - name: average-response-time-blueGreen
       successCondition: result[0] < 0.5
       failureCondition: result[0] >= 0.5
       failureLimit: 2
