@@ -7,7 +7,7 @@ releaseName: bg-rollouts
 image:
   repository: "yadnesh082024/github-actions-backend"
   pullPolicy: IfNotPresent
-  tag: main-20241024101021
+  tag: main-20241024123038
 
 serviceActive:
   type: ClusterIP
