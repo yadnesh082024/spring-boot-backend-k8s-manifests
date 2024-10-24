@@ -1,7 +1,7 @@
 apiVersion: argoproj.io/v1alpha1
 kind: AnalysisTemplate
 metadata:
-  name: response-time-analysis-bg
+  name: response-time-analysis-preview
   namespace: bg-rollouts-spring
   labels:
     app.kubernetes.io/managed-by: Helm

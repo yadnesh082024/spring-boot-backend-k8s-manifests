@@ -36,9 +36,9 @@ spec:
   strategy:
     blueGreen:
       activeService: {{ include "spring-app.fullname" . }}-active
-      previewService: {{ include "spring-app.fullname" . }}-preview
+      previewService: bg-rollouts-spring-release-bg-rollouts-preview
       autoPromotionEnabled: true
       prePromotionAnalysis:
         templates:
-          - templateName: endpoint-tests
-          - templateName: response-time-analysis-bg
+          - templateName: preview-svc-tests
+          - templateName: response-time-analysis-preview

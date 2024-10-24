@@ -1,7 +1,7 @@
 apiVersion: argoproj.io/v1alpha1
 kind: AnalysisTemplate
 metadata:
-  name: endpoint-tests
+  name: preview-svc-tests
   namespace: bg-rollouts-spring
   labels:
     app.kubernetes.io/managed-by: Helm
@@ -10,12 +10,12 @@ metadata:
     meta.helm.sh/release-namespace: bg-rollouts-spring
 spec:
   metrics:
-    - name: endpoint-test
+    - name: preview-svc-endpoint
       provider:
         job:
           spec:
             ttlSecondsAfterFinished: 600
-            backoffLimit: 3
+            backoffLimit: 2
             activeDeadlineSeconds: 150
             template:
               metadata:
