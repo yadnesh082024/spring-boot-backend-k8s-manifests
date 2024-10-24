@@ -31,7 +31,7 @@ spec:
                     args:
                       - |
                         set -e
-                        baseUrl="http://rollouts-spring-release-rollouts.rollouts-spring.svc.cluster.local:80"
+                        baseUrl="http://rollouts-spring-release-rollouts-canary.rollouts-spring.svc.cluster.local:80"
 
                         echo "Installing jq..."
                         apk add --no-cache jq
