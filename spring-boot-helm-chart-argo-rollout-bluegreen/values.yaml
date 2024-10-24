@@ -7,13 +7,12 @@ releaseName: bluegreen-rollouts
 image:
   repository: "yadnesh082024/github-actions-backend"
   pullPolicy: IfNotPresent
-  tag: main-20241024153943
+  tag: main-20241024101021
 
 service:
   type: ClusterIP
   port: 80
   #nodePort: 30050
-
 
 containers:
   port: 8080

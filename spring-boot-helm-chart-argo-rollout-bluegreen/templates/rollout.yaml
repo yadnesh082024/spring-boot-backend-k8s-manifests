@@ -38,6 +38,8 @@ spec:
       previewService: {{ include "spring-app.fullname" . }}-preview
       activeService: {{ include "spring-app.fullname" . }}-active
       autoPromotionEnabled: true
+      previewReplicaCount: 2
+      autoPromotionSeconds: 60
       prePromotionAnalysis:
         templates:
           - templateName: preview-svc-tests
