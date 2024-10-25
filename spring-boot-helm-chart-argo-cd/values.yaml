@@ -7,7 +7,7 @@ releaseName: argo-cd
 image:
   repository: "yadnesh082024/github-actions-backend"
   pullPolicy: IfNotPresent
-  tag: main-20241025100012
+  tag: main-20241025105748
 
 service:
   type: ClusterIP
