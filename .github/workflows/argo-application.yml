@@ -1,33 +1,58 @@
-name: Update Dropdown Options
+name: Configure app with argo cd
 
 on:
   workflow_dispatch:
+    inputs:
+      filename:
+        description: 'Select a file'
+        required: true
+        type: choice
+        options:
 
 jobs:
+  deploy:
+    permissions:
+      actions: read
+      contents: read
+      id-token: write
+    runs-on: ubuntu-latest
+
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
+
+      - name: Azure Login action
+        uses: azure/login@v2.2.0
         with:
-          repository: yadnesh082024/spring-boot-backend-k8s-manifests
-          token: ${{ secrets.GH_PAT_UPDATE_MANIFEST }}
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
+          enable-AzPSSession: true
 
-      - name: Set up Git
-        run: |
-          git config --global user.name "GitHub-Actions-CI-Build"
-          git config --global user.email "user@gitHubActions.com"
+      - name: Set up kubelogin for non-interactive login
+        uses: azure/use-kubelogin@v1.2
+        with:
+          kubelogin-version: 'v0.1.4'
 
-      - name: Find files with 'values' in the name
-        id: find_files
-        run: |
-          files=$(find ./argocd-configs/argocd-app-helm-chart -type f -name '*values*' | sort | uniq)
-          files_list=$(echo "$files" | tr '\n' ' ')
-          echo "files_list=$files_list" >> $GITHUB_ENV
+      - name: Get K8s context
+        uses: azure/aks-set-context@v4.0.1
+        with:
+          resource-group: ${{ secrets.RESOURCE_GROUP }}
+          cluster-name: ${{ secrets.CLUSTER_NAME }}
+          admin: 'false'
+          use-kubelogin: 'true'
 
-      - name: Clear existing options and update dropdown options
+      - name: Set up Kubernetes
+        uses: azure/setup-kubectl@v4.0.0
+        with:
+          version: 'latest'
+
+      - name: Set up Helm
+        uses: azure/setup-helm@v4.2.0
+        with:
+          version: 'latest'
+
+      - name: Wait for changes to apply
+        run: sleep 10
+
+      - name: Configure application with argo cd
         run: |
-          # Clear existing options
-      - name: Commit and push changes
-        run: |
-          git add .github/workflows/argo-application.yml
-          git commit -m "Update dropdown options in argo-application workflow"
-          git push origin main || echo "Push failed, possibly due to lack of permissions"
+          helm upgrade --install spring-app-argo-cd ./argocd-configs/argocd-app-helm-chart --namespace argocd --values=../argocd-configs/argocd-app-helm-chart/${{ github.event.inputs.filename }}
