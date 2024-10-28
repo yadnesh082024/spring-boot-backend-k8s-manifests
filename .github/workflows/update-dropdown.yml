@@ -1,6 +1,7 @@
 name: Update Dropdown Options
 
 on:
+  workflow_dispatch:
   push:
     paths:
       - 'spring-boot-backend-k8s-manifests/argocd-configs/argocd-app-helm-chart/**'
