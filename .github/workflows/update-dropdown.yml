@@ -30,14 +30,14 @@ jobs:
         run: |
           # Clear existing options
           sed -i '/options:/,/^ *$/d' .github/workflows/argo-application.yml
-          # Add the options header back with 2 spaces indentation
+          # Add the options header back with correct indentation
           sed -i '/type: choice/a \  options:' .github/workflows/argo-application.yml
           
           # Convert the comma-separated string back into an array
           IFS=',' read -r -a files_array <<< "${{ env.files_list }}"
           for file in "${files_array[@]}"; do
-            # Make sure to handle each file properly
-            sed -i "/  options:/a \          - ${file}" .github/workflows/argo-application.yml
+            # Add each file with consistent indentation
+            echo "          - ${file}" >> .github/workflows/argo-application.yml
           done
 
       - name: Commit and push changes
