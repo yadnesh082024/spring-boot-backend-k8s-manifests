@@ -1,6 +1,6 @@
 replicaCount: 2
 
-namespace: argo-cd-spring
+namespace: demo-ns
 
 releaseName: argo-cd
 
