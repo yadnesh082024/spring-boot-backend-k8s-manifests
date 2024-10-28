@@ -8,6 +8,9 @@ on:
         required: true
         type: choice
         options:
+- ./argocd-configs/argocd-app-helm-chart/values_1.yaml
+          - ./argocd-configs/argocd-app-helm-chart/values.yaml
+
 
 jobs:
   deploy:
