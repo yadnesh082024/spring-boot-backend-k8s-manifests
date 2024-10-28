@@ -7,7 +7,17 @@ on:
         description: 'Select a file'
         required: true
         type: choice
-  options:
+        options:
+          - ./argocd-configs/argocd-app-helm-chart/values_1.yaml
+          - ./argocd-configs/argocd-app-helm-chart/values.yaml
+jobs:
+  deploy:
+    permissions:
+      actions: read
+      contents: read
+      id-token: write
+    runs-on: ubuntu-latest
+
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -46,5 +56,4 @@ on:
 
       - name: Configure application with argo cd
         run: |
-          helm upgrade --install spring-app-argo-cd ./argocd-configs/argocd-app-helm-chart --namespace argocd --values=../argocd-configs/argocd-app-helm-chart/${{ github.event.inputs.filename }}          - ./argocd-configs/argocd-app-helm-chart/values.yaml
-          - ./argocd-configs/argocd-app-helm-chart/values_1.yaml
+          helm upgrade --install spring-app-argo-cd ./argocd-configs/argocd-app-helm-chart --namespace argocd --values=../argocd-configs/argocd-app-helm-chart/${{ github.event.inputs.filename }}

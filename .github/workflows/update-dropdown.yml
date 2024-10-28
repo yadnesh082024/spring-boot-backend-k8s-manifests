@@ -28,20 +28,28 @@ jobs:
 
       - name: Clear existing options and update dropdown options
         run: |
-          # Clear existing options
-          sed -i '/options:/,/^ *$/d' .github/workflows/argo-application.yml
-          # Add the options header back with correct indentation
-          sed -i '/type: choice/a \  options:' .github/workflows/argo-application.yml
+          # Define the path to the workflow files
+          workflow_files=(
+            '.github/workflows/argo-application.yml'
+            '.github/workflows/configure-app-with-argo-cd.yml'
+          )
           
-          # Convert the comma-separated string back into an array
-          IFS=',' read -r -a files_array <<< "${{ env.files_list }}"
-          for file in "${files_array[@]}"; do
-            # Add each file with consistent indentation
-            echo "          - ${file}" >> .github/workflows/argo-application.yml
+          for workflow_file in "${workflow_files[@]}"; do
+            # Clear existing options
+            sed -i '/options:/,/^ *$/d' "$workflow_file"
+            # Add the options header back with 2 spaces indentation
+            sed -i '/type: choice/a \  options:' "$workflow_file"
+
+            # Convert the comma-separated string back into an array
+            IFS=',' read -r -a files_array <<< "${{ env.files_list }}"
+            for file in "${files_array[@]}"; do
+              # Append new options with correct indentation (4 spaces)
+              sed -i "/  options:/a \    - ${file}" "$workflow_file"
+            done
           done
 
       - name: Commit and push changes
         run: |
-          git add .github/workflows/argo-application.yml
-          git commit -m "Update dropdown options in argo-application workflow"
+          git add .github/workflows/*.yml
+          git commit -m "Update dropdown options in workflow files"
           git push origin main || echo "Push failed, possibly due to lack of permissions"
