@@ -30,8 +30,8 @@ jobs:
         run: |
           # Clear existing options
           sed -i '/options:/,/^ *$/d' .github/workflows/argo-application.yml
-          # Add the options header back
-          sed -i '/type: choice/a \          options:' .github/workflows/argo-application.yml
+          # Add the options header back with 2 spaces indentation
+          sed -i '/type: choice/a \  options:' .github/workflows/argo-application.yml
           # Initialize options variable
           options=""
           # Loop through each file and format it for the options
@@ -39,7 +39,7 @@ jobs:
             options="${options}          - ${file}\n"  # 10 spaces before the dash
           done
           # Append the new options
-          sed -i "/options:/a ${options}" .github/workflows/argo-application.yml
+          sed -i "/  options:/a ${options}" .github/workflows/argo-application.yml
 
       - name: Commit and push changes
         run: |
