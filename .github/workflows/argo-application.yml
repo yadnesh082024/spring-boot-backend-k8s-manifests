@@ -7,9 +7,7 @@ on:
         description: 'Select a file'
         required: true
         type: choice
-  options:
-- ./argocd-configs/argocd-app-helm-chart/values.yaml
-          - ./argocd-configs/argocd-app-helm-chart/values_1.yaml
+        options:
 
 jobs:
   deploy:
