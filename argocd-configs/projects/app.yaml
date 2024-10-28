@@ -4,18 +4,16 @@ metadata:
   name: demo-app
   namespace: argocd
 spec:
-  project:
+  project: project-source-restriction
   source:
     repoURL: 'https://github.com/yadnesh082024/spring-boot-backend-k8s-manifests.git'
     targetRevision: main
     path: ./spring-boot-helm-chart-argo-cd
-    helm:
-      valueFiles:
-        - "{{ .Values.helm.valueFiles }}"
   destination:
     server: 'https://kubernetes.default.svc'
     namespace: demo-ns
-  syncPolicy:
-    automated:
-      prune: true
-      selfHeal: true
+
+#  syncPolicy:
+#    automated:
+#      prune: true
+#      selfHeal: true

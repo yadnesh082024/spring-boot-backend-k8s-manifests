@@ -11,5 +11,5 @@ spec:
     - namespace: '*'
       server: '*'
   sourceRepos:
-    - 'https://github.com/yadnesh082024/spring-boot-backend' ## Use '!' to place repo in BlackList, if we remove '!' the repo will be placed in WhiteList
+    - '!https://github.com/yadnesh082024/spring-boot-backend' ## Use '!' to place repo in BlackList, if we remove '!' the repo will be placed in WhiteList
     - '*' ## '*' means we are allowed to use any repos
