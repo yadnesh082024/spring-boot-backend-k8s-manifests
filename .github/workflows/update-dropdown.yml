@@ -26,7 +26,7 @@ jobs:
           options=$(echo "${{ env.files }}" | tr ' ' '\n' | sed 's/^/          - /')
 
           # Update the workflow file with new options
-          sed -i "s/options:\n          - /options:\n${options}/" .github/workflows/configure-app-with-argo-cd.yml
+          sed -i "/options:/a ${options}" .github/workflows/configure-app-with-argo-cd.yml
 
       - name: Commit and push changes
         run: |
