@@ -16,14 +16,15 @@ jobs:
 
       - name: Set up Git
         run: |
-          git config --global user.name "GitHub-Actions"
+          git config --global user.name "GitHub-Actions-CI-Build"
           git config --global user.email "user@gitHubActions.com"
 
       - name: Find files with 'values' in the name
         id: find_files
         run: |
           files=$(find ./argocd-configs/argocd-app-helm-chart -type f -name '*values*' | sort | uniq)
-          echo "files_list=$files" >> $GITHUB_ENV
+          files_list=$(echo "$files" | tr '\n' ',') # Use comma as delimiter
+          echo "files_list=${files_list}" >> $GITHUB_ENV
 
       - name: Clear existing options and update dropdown options
         run: |
@@ -31,8 +32,11 @@ jobs:
           sed -i '/options:/,/^ *$/d' .github/workflows/argo-application.yml
           # Add the options header back with 2 spaces indentation
           sed -i '/type: choice/a \  options:' .github/workflows/argo-application.yml
-          # Add new options with proper indentation
-          for file in ${{ env.files_list }}; do
+          
+          # Convert the comma-separated string back into an array
+          IFS=',' read -r -a files_array <<< "${{ env.files_list }}"
+          for file in "${files_array[@]}"; do
+            # Make sure to handle each file properly
             sed -i "/  options:/a \          - ${file}" .github/workflows/argo-application.yml
           done
 
