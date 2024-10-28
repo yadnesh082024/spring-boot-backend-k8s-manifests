@@ -13,9 +13,6 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
-        with:
-          repository: yadnesh082024/spring-boot-backend-k8s-manifests
-          token: ${{ secrets.GH_PAT_UPDATE_MANIFEST }}
 
       - name: Find files with 'values' in the name
         id: find_files
@@ -42,4 +39,4 @@ jobs:
           git config --global user.email 'github-actions@github.com'
           git add .github/workflows/argo-application.yml
           git commit -m "Update dropdown options in argo-application workflow"
-          git push
+          git push https://x-access-token:${GH_PAT_UPDATE_MANIFEST}@github.com/${{ github.repository }}.git HEAD:main
