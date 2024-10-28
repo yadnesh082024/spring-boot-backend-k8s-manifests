@@ -1,3 +1,13 @@
+import os
+
+# Specify the folder containing the files
+folder_path = 'spring-boot-backend-k8s-manifests/argocd-configs/argocd-app-helm-chart'
+
+# Get the list of files in the folder
+files = os.listdir(folder_path)
+
+# Generate the workflow content
+workflow_content = f"""
 name: Configure app with argo cd
 
 on:
@@ -8,10 +18,12 @@ on:
         required: true
         type: choice
         options:
-          - file1.txt
-          - file2.txt
-          - file3.txt
+"""
 
+for file in files:
+    workflow_content += f"          - {file}\n"
+
+workflow_content += """
 jobs:
   deploy:
     permissions:
@@ -27,7 +39,7 @@ jobs:
       - name: Azure Login action
         uses: azure/login@v2.2.0
         with:
-          creds: ${{ secrets.AZURE_CREDENTIALS }}
+          creds: \${{ secrets.AZURE_CREDENTIALS }}
           enable-AzPSSession: true
 
       - name: Set up kubelogin for non-interactive login
@@ -38,8 +50,8 @@ jobs:
       - name: Get K8s context
         uses: azure/aks-set-context@v4.0.1
         with:
-          resource-group: ${{ secrets.RESOURCE_GROUP }}
-          cluster-name: ${{ secrets.CLUSTER_NAME }}
+          resource-group: \${{ secrets.RESOURCE_GROUP }}
+          cluster-name: \${{ secrets.CLUSTER_NAME }}
           admin: 'false'
           use-kubelogin: 'true'
 
@@ -58,4 +70,11 @@ jobs:
 
       - name: Configure application with argo cd
         run: |
-          helm upgrade --install spring-app-argo-cd ./argocd-configs/argocd-app-helm-chart --namespace argocd --values=../argocd-configs/argocd-app-helm-chart/${{ github.event.inputs.filename }}
+          helm upgrade --install spring-app-argo-cd ./argocd-configs/argocd-app-helm-chart --namespace argocd --values=../argocd-configs/argocd-app-helm-chart/\${{ github.event.inputs.filename }}
+"""
+
+# Write the workflow content to the file
+with open('.github/workflows/manual-trigger.yml', 'w') as workflow_file:
+    workflow_file.write(workflow_content)
+
+print("Workflow file generated successfully.")
