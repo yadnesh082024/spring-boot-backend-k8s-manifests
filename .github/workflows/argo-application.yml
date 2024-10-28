@@ -60,4 +60,4 @@ jobs:
 
       - name: Configure application with argo cd
         run: |
-          helm upgrade --install spring-app-argo-cd ./argocd-app-helm-chart --namespace argocd --values=./argocd-app-helm-chart/values.yaml
+          helm upgrade --install spring-app-argo-cd ./argocd-configs/argocd-app-helm-chart --namespace argocd --values=../argocd-configs/argocd-app-helm-chart/values.yaml
