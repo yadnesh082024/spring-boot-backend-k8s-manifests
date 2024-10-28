@@ -54,6 +54,11 @@ jobs:
       - name: Wait for changes to apply
         run: sleep 10
 
-      - name: Configure application with argo cd
+#      - name: Configure application with argo cd
+#        run: |
+#          helm upgrade --install spring-app-argo-cd ./argocd-configs/argocd-app-helm-chart --namespace argocd --values=../argocd-configs/argocd-app-helm-chart/${{ github.event.inputs.filename }}
+
+      - name: Print
         run: |
-          helm upgrade --install spring-app-argo-cd ./argocd-configs/argocd-app-helm-chart --namespace argocd --values=../argocd-configs/argocd-app-helm-chart/${{ github.event.inputs.filename }}
+          values=../argocd-configs/argocd-app-helm-chart/${{ github.event.inputs.filename }}
+          echo $values
