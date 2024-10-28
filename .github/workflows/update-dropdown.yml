@@ -2,9 +2,6 @@ name: Update Dropdown Options
 
 on:
   workflow_dispatch:
-  push:
-    branches:
-      - main
 
 jobs:
   update-options:
@@ -17,7 +14,6 @@ jobs:
           repository: yadnesh082024/spring-boot-backend-k8s-manifests
           token: ${{ secrets.GH_PAT_UPDATE_MANIFEST }}
 
-      # Set up Git configuration for committing changes.
       - name: Set up Git
         run: |
           git config --global user.name "GitHub-Actions-CI-Build"
@@ -26,20 +22,23 @@ jobs:
       - name: Find files with 'values' in the name
         id: find_files
         run: |
-          files=$(find ./argocd-configs/argocd-app-helm-chart -type f -name '*values*')
+          files=$(find ./argocd-configs/argocd-app-helm-chart -type f -name '*values*' | sort | uniq)
           files_list=$(echo "$files" | tr '\n' ' ')
           echo "files_list=$files_list" >> $GITHUB_ENV
 
-      - name: Update dropdown options
+      - name: Clear existing options and update dropdown options
         run: |
+          # Clear existing options
+          sed -i '/options:/,/^ *$/d' .github/workflows/argo-application.yml
+          # Add the options header back
+          sed -i '/type: choice/a \          options:' .github/workflows/argo-application.yml
           # Initialize options variable
           options=""
           # Loop through each file and format it for the options
           for file in ${{ env.files_list }}; do
-            options="${options}          - ${file}\n"
+            options="${options}          - ${file}\n"  # 10 spaces before the dash
           done
-
-          # Update the workflow file with new options
+          # Append the new options
           sed -i "/options:/a ${options}" .github/workflows/argo-application.yml
 
       - name: Commit and push changes
