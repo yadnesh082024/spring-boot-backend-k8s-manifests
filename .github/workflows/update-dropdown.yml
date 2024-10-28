@@ -31,25 +31,30 @@ jobs:
           # Define the path to the workflow files
           workflow_files=(
             '.github/workflows/argo-application.yml'
-            '.github/workflows/configure-app-with-argo-cd.yml'
+            '.github/workflows/update-dropdown.yml'
           )
           
           for workflow_file in "${workflow_files[@]}"; do
-            # Clear existing options
-            sed -i '/options:/,/^ *$/d' "$workflow_file"
-            # Add the options header back with 2 spaces indentation
-            sed -i '/type: choice/a \  options:' "$workflow_file"
-
-            # Convert the comma-separated string back into an array
-            IFS=',' read -r -a files_array <<< "${{ env.files_list }}"
-            for file in "${files_array[@]}"; do
-              # Append new options with correct indentation (4 spaces)
-              sed -i "/  options:/a \    - ${file}" "$workflow_file"
-            done
+            # Check if the file exists before attempting to modify it
+            if [[ -f "$workflow_file" ]]; then
+              # Clear existing options
+              sed -i '/options:/,/^ *$/d' "$workflow_file"
+              # Add the options header back with 2 spaces indentation
+              sed -i '/type: choice/a \  options:' "$workflow_file"
+          
+              # Convert the comma-separated string back into an array
+              IFS=',' read -r -a files_array <<< "${{ env.files_list }}"
+              for file in "${files_array[@]}"; do
+                # Append new options with correct indentation (4 spaces)
+                sed -i "/  options:/a \    - ${file}" "$workflow_file"
+              done
+            else
+              echo "Warning: $workflow_file does not exist and will be skipped."
+            fi
           done
 
       - name: Commit and push changes
         run: |
           git add .github/workflows/*.yml
-          git commit -m "Update dropdown options in workflow files"
+          git commit -m "Update dropdown options in workflow files" || echo "No changes to commit"
           git push origin main || echo "Push failed, possibly due to lack of permissions"
