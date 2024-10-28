@@ -17,13 +17,13 @@ jobs:
       - name: Find files with 'values' in the name
         id: find_files
         run: |
-          files=$(find ./argocd-configs/argocd-app-helm-chart -type f -name '*values*')
+          files=$(find ./argocd-configs/argocd-app-helm-chart -type f -name '*values*' | tr '\n' ' ')
           echo "files=$files" >> $GITHUB_ENV
 
       - name: Update dropdown options
         run: |
           # Convert the found files into the required format for the options
-          options=$(echo "${{ env.files }}" | sed 's/ /\n/g' | sed 's/^/          - /')
+          options=$(echo "${{ env.files }}" | tr ' ' '\n' | sed 's/^/          - /')
 
           # Update the workflow file with new options
           sed -i "s/options:\n          - /options:\n${options}/" .github/workflows/configure-app-with-argo-cd.yml
