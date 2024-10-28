@@ -18,14 +18,15 @@ jobs:
         id: find_files
         run: |
           files=$(find ./argocd-configs/argocd-app-helm-chart -type f -name '*values*')
-          echo "files=$files" >> $GITHUB_ENV
+          files_list=$(echo "$files" | tr '\n' ' ')
+          echo "files_list=$files_list" >> $GITHUB_ENV
 
       - name: Update dropdown options
         run: |
           # Initialize options variable
           options=""
           # Loop through each file and format it for the options
-          for file in ${{ env.files }}; do
+          for file in ${{ env.files_list }}; do
             options="${options}          - ${file}\n"
           done
 
