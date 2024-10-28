@@ -23,8 +23,7 @@ jobs:
         id: find_files
         run: |
           files=$(find ./argocd-configs/argocd-app-helm-chart -type f -name '*values*' | sort | uniq)
-          files_list=$(echo "$files" | tr '\n' ' ')
-          echo "files_list=$files_list" >> $GITHUB_ENV
+          echo "files_list=$files" >> $GITHUB_ENV
 
       - name: Clear existing options and update dropdown options
         run: |
