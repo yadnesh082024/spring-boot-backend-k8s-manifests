@@ -14,6 +14,12 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
+      # Set up Git configuration for committing changes.
+      - name: Set up Git
+        run: |
+          git config --global user.name "GitHub-Actions-CI-Build"
+          git config --global user.email "user@gitHubActions.com"
+
       - name: Find files with 'values' in the name
         id: find_files
         run: |
@@ -35,8 +41,6 @@ jobs:
 
       - name: Commit and push changes
         run: |
-          git config --global user.name 'github-actions'
-          git config --global user.email 'github-actions@github.com'
           git add .github/workflows/argo-application.yml
           git commit -m "Update dropdown options in argo-application workflow"
           git push https://x-access-token:${GH_PAT_UPDATE_MANIFEST}@github.com/${{ github.repository }}.git HEAD:main
