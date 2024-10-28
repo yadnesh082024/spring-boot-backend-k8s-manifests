@@ -8,9 +8,6 @@ on:
         required: true
         type: choice
         options:
-          - file1.txt
-          - file2.txt
-          - file3.txt
 
 jobs:
   deploy:

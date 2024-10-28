@@ -1,34 +1,36 @@
 name: Update Dropdown Options
 
 on:
-  workflow_dispatch:
   push:
-    paths:
-      - 'spring-boot-backend-k8s-manifests/argocd-configs/argocd-app-helm-chart/**'
+    branches:
+      - main
 
 jobs:
-  update-dropdown:
+  update-options:
     runs-on: ubuntu-latest
 
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Set up Python
-        uses: actions/setup-python@v2
-        with:
-          python-version: '3.x'
-
-      - name: Generate workflow file
+      - name: Find files with 'values' in the name
+        id: find_files
         run: |
-          python generate_workflow.py
+          files=$(find C:/workspace/spring-boot-backend-k8s-manifests/argocd-configs/argocd-app-helm-chart -type f -name '*values*')
+          echo "files=$files" >> $GITHUB_ENV
+
+      - name: Update dropdown options
+        run: |
+          # Convert the found files into the required format for the options
+          options=$(echo "${{ env.files }}" | sed 's/^/          - /' | tr '\n' '\n')
+
+          # Update the workflow file with new options
+          sed -i "s/options:\n          - /options:\n${options}/" .github/workflows/configure-app-with-argo-cd.yml
 
       - name: Commit and push changes
         run: |
           git config --global user.name 'github-actions'
           git config --global user.email 'github-actions@github.com'
-          git add .github/workflows/manual-trigger.yml
-          git commit -m 'Update dropdown options in manual-trigger.yml'
+          git add .github/workflows/configure-app-with-argo-cd.yml
+          git commit -m "Update dropdown options in configure-app-with-argo-cd workflow"
           git push
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
