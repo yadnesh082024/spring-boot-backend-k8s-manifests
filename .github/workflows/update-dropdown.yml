@@ -39,4 +39,3 @@ jobs:
           git add .github/workflows/configure-app-with-argo-cd.yml
           git commit -m "Update dropdown options in configure-app-with-argo-cd workflow"
           git push
-s
