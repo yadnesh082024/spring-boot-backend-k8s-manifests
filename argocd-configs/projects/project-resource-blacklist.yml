@@ -9,7 +9,7 @@ spec:
       kind: '*'
   namespaceResourceBlacklist:
     - group: ''
-      kind: 'ServiceAccount' ## it means we are NOT allowd to use 'serviceaccount' namespacescoped resource
+      kind: 'Service' ## it means we are NOT allowd to use 'service' namespacescoped resource
   destinations:
     - namespace: '*'
       server: '*'
