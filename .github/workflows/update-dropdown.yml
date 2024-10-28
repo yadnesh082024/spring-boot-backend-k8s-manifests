@@ -13,6 +13,9 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
+        with:
+          repository: yadnesh082024/spring-boot-backend-k8s-manifests
+          token: ${{ secrets.GH_PAT_UPDATE_MANIFEST }}
 
       # Set up Git configuration for committing changes.
       - name: Set up Git
