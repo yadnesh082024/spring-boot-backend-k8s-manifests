@@ -107,6 +107,9 @@ on:
 - ./argocd-configs/argocd-app-helm-chart/values_1.yaml
           - ./argocd-configs/argocd-app-helm-chart/values.yaml
 
+- ./argocd-configs/argocd-app-helm-chart/values_1.yaml
+          - ./argocd-configs/argocd-app-helm-chart/values.yaml
+
 
 jobs:
   deploy:
