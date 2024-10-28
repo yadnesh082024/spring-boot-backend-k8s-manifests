@@ -31,12 +31,12 @@ jobs:
           done
 
           # Update the workflow file with new options
-          sed -i "/options:/a ${options}" .github/workflows/configure-app-with-argo-cd.yml
+          sed -i "/options:/a ${options}" .github/workflows/argo-application.yml
 
       - name: Commit and push changes
         run: |
           git config --global user.name 'github-actions'
           git config --global user.email 'github-actions@github.com'
-          git add .github/workflows/configure-app-with-argo-cd.yml
-          git commit -m "Update dropdown options in configure-app-with-argo-cd workflow"
+          git add .github/workflows/argo-application.yml
+          git commit -m "Update dropdown options in argo-application workflow"
           git push
