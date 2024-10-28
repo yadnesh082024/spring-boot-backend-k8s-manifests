@@ -4,12 +4,17 @@ on:
   workflow_dispatch:
     inputs:
       filename:
-        description: 'Select a file'
+        description: 'Select a values file'
         required: true
         type: choice
         options:
           - values.yaml
           - values_1.yaml
+      release_name:
+        description: 'Specify the release name'
+        required: true
+        type: string
+
 jobs:
   deploy:
     permissions:
@@ -54,11 +59,6 @@ jobs:
       - name: Wait for changes to apply
         run: sleep 10
 
-#      - name: Configure application with argo cd
-#        run: |
-#          helm upgrade --install spring-app-argo-cd ./argocd-configs/argocd-app-helm-chart --namespace argocd --values=../argocd-configs/argocd-app-helm-chart/${{ github.event.inputs.filename }}
-
-      - name: Print
+      - name: Configure application with argo cd
         run: |
-          values=../argocd-configs/argocd-app-helm-chart/${{ github.event.inputs.filename }}
-          echo $values
+          helm upgrade --install ${{ github.event.inputs.release_name }} ./argocd-configs/argocd-app-helm-chart --namespace argocd --values=../argocd-configs/argocd-app-helm-chart/${{ github.event.inputs.filename }}
