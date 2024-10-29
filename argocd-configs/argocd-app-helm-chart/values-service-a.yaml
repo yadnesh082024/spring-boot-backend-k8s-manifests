@@ -1,0 +1,15 @@
+name: service-a
+namespace: argocd
+project: default
+repoURL: 'https://github.com/yadnesh082024/spring-boot-backend-k8s-manifests.git'
+targetRevision: main
+path: ./spring-boot-helm-chart-argo-cd
+helm:
+  valueFiles: values.yaml
+destination:
+  server: 'https://kubernetes.default.svc'
+  namespace: argo-cd-spring
+syncPolicy:
+  automated:
+    prune: true
+    selfHeal: true

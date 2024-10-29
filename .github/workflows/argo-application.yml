@@ -9,7 +9,9 @@ on:
         type: choice
         options:
           - values.yaml
-          - values_1.yaml
+          - values-service-a.yaml
+          - values-service-b.yaml
+          - values-service-c.yaml
       release_name:
         description: 'Specify the release name'
         required: true
