@@ -1,0 +1,15 @@
+name: service-c
+namespace: argocd
+project: default
+repoURL: 'https://github.com/yadnesh082024/service-c.git'
+targetRevision: main
+path: ./spring-boot-helm-chart-argo-cd
+helm:
+  valueFiles: values.yaml
+destination:
+  server: 'https://kubernetes.default.svc'
+  namespace: demo-ns
+#syncPolicy:
+#  automated:
+#    prune: true
+#    selfHeal: true
