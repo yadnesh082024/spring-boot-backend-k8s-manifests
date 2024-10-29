@@ -20,7 +20,7 @@ spec:
 
   syncPolicy:
     syncOptions:
-      - ApplyOutofSyncOnly=true
+      - ApplyOutOfSyncOnly=true
     {{- if .Values.syncPolicy.automated.enabled }}
     automated:
       prune: {{ .Values.syncPolicy.automated.prune }}
