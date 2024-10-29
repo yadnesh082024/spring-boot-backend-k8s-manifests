@@ -15,9 +15,9 @@ spec:
   destination:
     server: {{ .Values.destination.server }}
     namespace: {{ .Values.destination.namespace }}
+  {{- if .Values.syncPolicy.automated.enabled }}
   syncPolicy:
-    {{- if .Values.syncPolicy.automated.enabled }}
     automated:
       prune: {{ .Values.syncPolicy.automated.prune }}
       selfHeal: {{ .Values.syncPolicy.automated.selfHeal }}
-    {{- end }}
+  {{- end }}

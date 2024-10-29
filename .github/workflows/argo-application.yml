@@ -63,4 +63,4 @@ jobs:
 
       - name: Configure application with argo cd
         run: |
-          helm upgrade --install ${{ github.event.inputs.release_name }} ./argocd-configs/argocd-app-helm-chart --namespace argocd --values=../argocd-configs/argocd-app-helm-chart/${{ github.event.inputs.filename }}
+          helm upgrade --install ${{ github.event.inputs.release_name }} ./argocd-configs/argocd-app-helm-chart --namespace argocd --values=./argocd-configs/argocd-app-helm-chart/${{ github.event.inputs.filename }}
