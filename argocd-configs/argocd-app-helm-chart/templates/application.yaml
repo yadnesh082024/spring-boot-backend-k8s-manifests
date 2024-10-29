@@ -14,7 +14,9 @@ spec:
         - "{{ .Values.helm.valueFiles }}"
   destination:
     server: {{ .Values.destination.server }}
+    {{- if .Values.destination.namespace }}
     namespace: {{ .Values.destination.namespace }}
+    {{- end }}
   {{- if .Values.syncPolicy.automated.enabled }}
   syncPolicy:
     automated:
