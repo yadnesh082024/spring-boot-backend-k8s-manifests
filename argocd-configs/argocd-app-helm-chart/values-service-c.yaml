@@ -8,7 +8,7 @@ helm:
   valueFiles: values.yaml
 destination:
   server: 'https://kubernetes.default.svc'
-  namespace: demo-ns
+#  namespace: demo-ns
 syncPolicy:
   automated:
     enabled: false
