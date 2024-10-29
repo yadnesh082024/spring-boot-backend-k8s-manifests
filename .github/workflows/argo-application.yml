@@ -54,10 +54,13 @@ jobs:
         with:
           version: 'latest'
 
+      - name: Wait for changes to apply
+        run: sleep 10
+
       - name: Set release name
         id: set_release_name
         run: |
-          RELEASE_NAME=$(echo "${{ github.event.inputs.filename }}" | sed 's/values-/release-/')
+          RELEASE_NAME=$(echo "${{ github.event.inputs.filename }}" | sed 's/values/release/' | sed 's/.yaml//')
           echo "release_name=${RELEASE_NAME}" >> $GITHUB_ENV
 
       - name: Configure application with argo cd
