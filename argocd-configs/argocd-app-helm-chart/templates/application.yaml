@@ -17,9 +17,12 @@ spec:
     {{- if .Values.destination.namespace }}
     namespace: {{ .Values.destination.namespace }}
     {{- end }}
-  {{- if .Values.syncPolicy.automated.enabled }}
+
   syncPolicy:
+    syncOptions:
+      - ApplyOutofSyncOnly=true
+    {{- if .Values.syncPolicy.automated.enabled }}
     automated:
       prune: {{ .Values.syncPolicy.automated.prune }}
       selfHeal: {{ .Values.syncPolicy.automated.selfHeal }}
-  {{- end }}
+    {{- end }}
