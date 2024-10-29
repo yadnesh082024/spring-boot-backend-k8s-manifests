@@ -11,5 +11,7 @@ destination:
   namespace: argo-cd-spring
 syncPolicy:
   automated:
+    enabled: true
     prune: true
     selfHeal: true
+

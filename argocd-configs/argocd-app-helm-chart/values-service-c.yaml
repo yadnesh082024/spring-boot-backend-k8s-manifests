@@ -9,7 +9,8 @@ helm:
 destination:
   server: 'https://kubernetes.default.svc'
   namespace: demo-ns
-#syncPolicy:
-#  automated:
-#    prune: true
-#    selfHeal: true
+syncPolicy:
+  automated:
+    enabled: false
+    prune: false
+    selfHeal: false
