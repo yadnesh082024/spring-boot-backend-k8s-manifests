@@ -1,4 +1,4 @@
-name: backend
+name: springboot-argocd
 namespace: argocd
 project: default
 repoURL: 'https://github.com/yadnesh082024/spring-boot-backend-k8s-manifests.git'
