@@ -23,5 +23,5 @@ version: 1.0.0
 # Note that this versioning does not follow Semantic Versioning.
 # Instead, it reflects the version the application is using.
 # It is recommended to use quotes around the version number.
-appVersion: "2024.11.4"
+appVersion: "2024.11.5"
 
