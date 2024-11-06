@@ -73,6 +73,9 @@ jobs:
       - name: Set Kubernetes Namespace
         run: kubectl config set-context --current --namespace=rollouts-spring
 
+      - name: Install jq
+        run: sudo apt-get install -y jq
+
       - name: Deploy to Spring Boot
         run: |
           helm upgrade --install rollouts-spring-release ./spring-boot-helm-chart-argo-rollout --create-namespace --namespace rollouts-spring --values=./spring-boot-helm-chart-argo-rollout/values.yaml  --force
@@ -80,7 +83,7 @@ jobs:
       - name: Monitor Rollout Status
         run: |
           while true; do
-            status=$(kubectl argo rollouts get rollout rollouts-spring-release-rollouts --namespace=rollouts-spring -o json | jq -r '.status.phase')
+            status=$(kubectl argo rollouts get rollout rollouts-spring-release-rollouts --namespace=rollouts-spring --output json | jq -r '.status.phase')
             echo "Current rollout status: $status"
             if [[ "$status" == "Healthy" ]]; then
               echo "Rollout completed successfully."
