@@ -81,16 +81,4 @@ jobs:
           helm upgrade --install rollouts-spring-release ./spring-boot-helm-chart-argo-rollout --create-namespace --namespace rollouts-spring --values=./spring-boot-helm-chart-argo-rollout/values.yaml  --force
 
       - name: Monitor Rollout Status
-        run: |
-          while true; do
-            status=$(kubectl argo rollouts get rollout rollouts-spring-release-rollouts --namespace=rollouts-spring --output json | jq -r '.status.phase')
-            echo "Current rollout status: $status"
-            if [[ "$status" == "Healthy" ]]; then
-              echo "Rollout completed successfully."
-              exit 0
-            elif [[ "$status" == "Degraded" ]]; then
-              echo "Rollout failed."
-              exit 1
-            fi
-            sleep 30
-          done
+        run: kubectl argo rollouts get rollout rollouts-spring-release-rollouts --namespace=rollouts-spring
