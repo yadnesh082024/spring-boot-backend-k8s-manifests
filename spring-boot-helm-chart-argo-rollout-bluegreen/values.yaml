@@ -7,7 +7,7 @@ releaseName: bluegreen-rollouts
 image:
   repository: "yadnesh082024/github-actions-backend"
   pullPolicy: IfNotPresent
-  tag: main-20241107120346
+  tag: main-20241107121211
 
 service:
   type: ClusterIP
