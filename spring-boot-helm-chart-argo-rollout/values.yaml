@@ -7,7 +7,7 @@ releaseName: rollouts
 image:
   repository: "yadnesh082024/github-actions-backend"
   pullPolicy: IfNotPresent
-  tag: main-20241107160412
+  tag: main-20241108231455
 
 service:
   type: ClusterIP
